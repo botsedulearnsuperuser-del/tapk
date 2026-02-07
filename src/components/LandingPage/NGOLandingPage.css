@@ -117,10 +117,20 @@ button:active {
   display: none;
 }
 
-.nav-links li a {
+.nav-links li a,
+.signin-nav-btn {
   font-size: 0.9rem;
   font-weight: 500;
   color: rgba(255, 255, 255, 0.9);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.signin-nav-btn:hover {
+  color: var(--gold-color);
 }
 
 .cta-btn {

@@ -1,12 +1,13 @@
-import NGOLandingPage from './components/LandingPage/NGOLandingPage';
+import LegaeLandingPage from './components/LandingPage/LegaeLandingPage';
 import './App.css';
 
 function App() {
   return (
     <div className="app-container">
-      <NGOLandingPage />
+      <LegaeLandingPage />
     </div>
   );
 }
 
 export default App;
+

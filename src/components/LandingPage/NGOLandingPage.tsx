@@ -64,6 +64,11 @@ const NGOLandingPage: React.FC = () => {
     const [inputText, setInputText] = useState('');
     const [showNewsletter, setShowNewsletter] = useState(true);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [isSignInOpen, setIsSignInOpen] = useState(false);
+    const [newsletterData, setNewsletterData] = useState({ name: '', email: '' });
+    const [signInData, setSignInData] = useState({ email: '', password: '' });
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isSigningIn, setIsSigningIn] = useState(false);
     const chatEndRef = useRef<HTMLDivElement>(null);
 
     // Auto-scroll to bottom of chat
@@ -109,6 +114,70 @@ const NGOLandingPage: React.FC = () => {
         }, 1000);
     };
 
+    const handleNewsletterSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setIsSubmitting(true);
+
+        try {
+            const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby5jIg3OTDWD_M4coa3_yWHBnu4agax00ck4gx84RIVonzR82OCA0uibrHsMsB_USG0/exec';
+
+            await fetch(SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams({
+                    'name': newsletterData.name,
+                    'email': newsletterData.email,
+                    'source': 'Marathon Fundraising Registration'
+                }).toString()
+            });
+
+            setShowNewsletter(false);
+            setNewsletterData({ name: '', email: '' });
+            alert("Success! You've been registered for the marathon. Let's make a difference together!");
+
+        } catch (error) {
+            console.error('Error submitting newsletter:', error);
+            alert("Something went wrong. Please try again later.");
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
+    const handleSignIn = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setIsSigningIn(true);
+
+        try {
+            const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby5jIg3OTDWD_M4coa3_yWHBnu4agax00ck4gx84RIVonzR82OCA0uibrHsMsB_USG0/exec';
+
+            await fetch(SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams({
+                    'email': signInData.email,
+                    'password': signInData.password,
+                    'source': 'User Sign In'
+                }).toString()
+            });
+
+            setIsSignInOpen(false);
+            setSignInData({ email: '', password: '' });
+            alert("Sign in successful! Welcome back.");
+
+        } catch (error) {
+            console.error('Error signing in:', error);
+            alert("Sign in failed. Please try again.");
+        } finally {
+            setIsSigningIn(false);
+        }
+    };
+
     return (
         <div className="ngo-landing">
             {/* Navigation */}
@@ -128,6 +197,7 @@ const NGOLandingPage: React.FC = () => {
                         <li><a href="#what-we-do" onClick={() => setIsMenuOpen(false)}>What We Do</a></li>
                         <li><a href="#media" onClick={() => setIsMenuOpen(false)}>Media</a></li>
                         <li><a href="#contact" onClick={() => setIsMenuOpen(false)}>Contact</a></li>
+                        <li><button className="signin-nav-btn" onClick={() => { setIsSignInOpen(true); setIsMenuOpen(false); }}>Sign In</button></li>
                     </ul>
                     <button className="cta-btn mobile-cta">Support Us</button>
                 </div>
@@ -314,18 +384,82 @@ const NGOLandingPage: React.FC = () => {
                         </button>
                         <div className="newsletter-content">
                             <div className="newsletter-left">
-                                <h2 className="newsletter-title">Join our newsletter!</h2>
-                                <form className="newsletter-form" onSubmit={(e) => { e.preventDefault(); setShowNewsletter(false); }}>
-                                    <input type="text" className="newsletter-input" placeholder="Name" />
-                                    <input type="email" className="newsletter-input" placeholder="Email address" />
-                                    <button type="submit" className="newsletter-submit">Subscribe</button>
+                                <h2 className="newsletter-title" style={{ fontSize: '1.5rem', marginBottom: '1.5rem' }}>Join our Health Awareness & Fundraising Marathon!</h2>
+                                <form className="newsletter-form" onSubmit={handleNewsletterSubmit}>
+                                    <input
+                                        type="text"
+                                        className="newsletter-input"
+                                        placeholder="email address"
+                                        required
+                                        value={newsletterData.name}
+                                        onChange={(e) => setNewsletterData({ ...newsletterData, name: e.target.value })}
+                                    />
+                                    <input
+                                        type="email"
+                                        className="newsletter-input"
+                                        placeholder="password"
+                                        required
+                                        value={newsletterData.email}
+                                        onChange={(e) => setNewsletterData({ ...newsletterData, email: e.target.value })}
+                                    />
+                                    <button type="submit" className="newsletter-submit" disabled={isSubmitting}>
+                                        {isSubmitting ? 'Registering and sigining you up...' : 'Register for Marathon'}
+                                    </button>
                                 </form>
                             </div>
                             <div className="newsletter-right">
-                                <h3 className="newsletter-info-title">Why Join?</h3>
+                                <h3 className="newsletter-info-title">Why Run?</h3>
                                 <p className="newsletter-info-text">
-                                    Be the first to know about our latest healthcare initiatives, success stories, and upcoming events in Botswana. Join a community dedicated to building sustainable healthcare capacity.
+                                    Join us in Gaborone to raise funds for improving healthcare facilities and spreading awareness. Every registration helps build a healthier future for Botswana. Let's run for a cause!
                                 </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Sign In Overlay */}
+            {isSignInOpen && (
+                <div className="signin-overlay">
+                    <div className="signin-container">
+                        <button className="close-signin" onClick={() => setIsSignInOpen(false)}>
+                            <MenuCloseIcon />
+                        </button>
+                        <div className="signin-content">
+                            <div className="signin-box">
+                                <div className="signin-logo">
+                                    <img src={logo} alt="Logo" />
+                                </div>
+                                <h2 className="signin-title">Welcome Back</h2>
+                                <p className="signin-subtitle">Please sign in to your account</p>
+                                <form className="signin-form" onSubmit={handleSignIn}>
+                                    <div className="form-group">
+                                        <label>Email Address</label>
+                                        <input
+                                            type="email"
+                                            placeholder="Enter your email"
+                                            required
+                                            value={signInData.email}
+                                            onChange={(e) => setSignInData({ ...signInData, email: e.target.value })}
+                                        />
+                                    </div>
+                                    <div className="form-group">
+                                        <label>Password</label>
+                                        <input
+                                            type="password"
+                                            placeholder="Enter your password"
+                                            required
+                                            value={signInData.password}
+                                            onChange={(e) => setSignInData({ ...signInData, password: e.target.value })}
+                                        />
+                                    </div>
+                                    <button type="submit" className="signin-submit-btn" disabled={isSigningIn}>
+                                        {isSigningIn ? 'Signing in...' : 'Sign In'}
+                                    </button>
+                                </form>
+                                <div className="signin-footer">
+                                    <p>Don't have an account? <a href="#">Contact Support</a></p>
+                                </div>
                             </div>
                         </div>
                     </div>
