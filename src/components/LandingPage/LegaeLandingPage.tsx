@@ -3,6 +3,8 @@ import './LegaeLandingPage.css';
 
 const LegaeLandingPage: React.FC = () => {
     const assetsPath = '/assets/legaemobile/';
+    // REPLACE THIS URL WITH YOUR DEPLOYED GOOGLE APPS SCRIPT WEB APP URL
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzIG_gYJf9uhg9O93wsigvyjBtTsSFJR_NJF5gEkKApsQDJP6WJhRvJkAFGhm4cg7Uw8A/exec";
 
     // Images based on the directory scan
     const heroHandImg = `${assetsPath}Untitled_design__2_-removebg-preview.png`;
@@ -17,26 +19,57 @@ const LegaeLandingPage: React.FC = () => {
         setActiveFaq(activeFaq === index ? null : index);
     };
 
-    const [showWaitlist, setShowWaitlist] = useState(false);
+    const [showWaitlist, setShowWaitlist] = useState(true);
     const [showPrivacy, setShowPrivacy] = useState(false);
     const [waitlistEmail, setWaitlistEmail] = useState('');
     const [waitlistStep, setWaitlistStep] = useState(1);
     const [agreedToEmails, setAgreedToEmails] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            setShowWaitlist(true);
-        }, 3000);
-        return () => clearTimeout(timer);
-    }, []);
+    // Removed delayed useEffect
 
     const handleWaitlistSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         setWaitlistStep(2);
     };
 
-    const handleFinalConfirm = () => {
-        alert(`Thank you! ${waitlistEmail} has been added to the Legae waitlist.`);
+    const handleFinalConfirm = async () => {
+        setIsSubmitting(true);
+        try {
+            // Prepare data for Google Sheets
+            const formData = new FormData();
+            formData.append('email', waitlistEmail);
+            formData.append('consent', agreedToEmails ? "Yes" : "No");
+            formData.append('timestamp', new Date().toISOString());
+
+            // Since Google Apps Script Web App URLs can be finicky with CORS and simple fetch,
+            // we often use 'no-cors' mode or a JSONP approach if simple fetch fails.
+            // However, modern deployments usually support simple POST with JSON body.
+
+            // Attempting JSON POST
+            await fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors', // Important for Google Apps Script to work without complex CORS headers
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email: waitlistEmail,
+                    consent: agreedToEmails
+                })
+            });
+
+            // Success (with no-cors we can't read the response but assume success if no network error)
+            setWaitlistStep(3); // Move to success step
+        } catch (error) {
+            console.error('Error submitting to waitlist:', error);
+            alert('There was an issue joining the waitlist. Please try again later.');
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
+    const handleClosePopup = () => {
         setShowWaitlist(false);
         setWaitlistEmail('');
         setWaitlistStep(1);
@@ -270,10 +303,7 @@ const LegaeLandingPage: React.FC = () => {
 
             {/* Footer */}
             <footer className="footer">
-                <div className="footer-logo-large" style={{ display: 'flex', alignItems: 'center', gap: '1rem', justifyContent: 'center' }}>
-                    <img src={brandLogo} alt="Legae Logo" style={{ height: '3rem', width: 'auto' }} />
-                    Legae
-                </div>
+                <div className="footer-logo-large">Legae</div>
                 <div className="footer-grid">
                     <div className="footer-info">
                         <p style={{ color: '#666', maxWidth: '300px' }}>
@@ -307,7 +337,7 @@ const LegaeLandingPage: React.FC = () => {
             {showWaitlist && (
                 <div className="popup-overlay">
                     <div className="waitlist-popup">
-                        <button className="close-popup" onClick={() => setShowWaitlist(false)}>
+                        <button className="close-popup" onClick={handleClosePopup}>
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M5 5l14 14M5 19l14 -14"><animate fill="freeze" attributeName="d" dur="0.4s" values="M5 5l14 0M5 19l14 0;M5 5l14 14M5 19l14 -14" /></path><path d="M12 12h0"><animate fill="freeze" attributeName="d" dur="0.4s" values="M5 12h14;M12 12h0" /><set fill="freeze" attributeName="opacity" begin="0.4s" to="0" /></path></g></svg>
                         </button>
                         <div className="popup-content">
@@ -315,7 +345,6 @@ const LegaeLandingPage: React.FC = () => {
                                 <img src={heroHandImg} alt="Legae App" className="popup-app-img" />
                             </div>
                             <div className="popup-right">
-                                <span className="hero-tagline" style={{ color: '#A31D1D', fontSize: '0.8rem', letterSpacing: '2px', fontWeight: 'bold', textTransform: 'uppercase', marginBottom: '1rem', display: 'block' }}>Coming Soon</span>
 
                                 {waitlistStep === 1 ? (
                                     <>
@@ -338,7 +367,7 @@ const LegaeLandingPage: React.FC = () => {
                                             </button>
                                         </form>
                                     </>
-                                ) : (
+                                ) : waitlistStep === 2 ? (
                                     <>
                                         <h2>One last thing...</h2>
                                         <p className="popup-desc">
@@ -359,67 +388,115 @@ const LegaeLandingPage: React.FC = () => {
                                         <button
                                             className="try-free-btn"
                                             onClick={handleFinalConfirm}
-                                            disabled={!agreedToEmails}
+                                            disabled={!agreedToEmails || isSubmitting}
                                             style={{
                                                 width: '100%',
                                                 padding: '1rem',
-                                                background: agreedToEmails ? '#A31D1D' : '#ccc',
-                                                cursor: agreedToEmails ? 'pointer' : 'not-allowed'
+                                                background: agreedToEmails && !isSubmitting ? '#A31D1D' : '#ccc',
+                                                cursor: agreedToEmails && !isSubmitting ? 'pointer' : 'not-allowed',
+                                                display: 'flex',
+                                                justifyContent: 'center',
+                                                alignItems: 'center',
+                                                gap: '10px'
                                             }}
                                         >
-                                            Confirm & Join
+                                            {isSubmitting ? (
+                                                <>
+                                                    <span className="spinner" style={{
+                                                        width: '20px',
+                                                        height: '20px',
+                                                        border: '3px solid rgba(255,255,255,0.3)',
+                                                        borderTop: '3px solid white',
+                                                        borderRadius: '50%',
+                                                        animation: 'spin 1s linear infinite'
+                                                    }}></span>
+                                                    Joining...
+                                                </>
+                                            ) : (
+                                                "Confirm & Join"
+                                            )}
                                         </button>
                                     </>
+                                ) : (
+                                    /* Step 3: Success Message */
+                                    <div style={{ textAlign: 'center', padding: '1rem 0' }}>
+                                        <div style={{
+                                            marginBottom: '1.5rem',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            margin: '0 auto 1.5rem auto'
+                                        }}>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 512 512">
+                                                <path fill="#A31D1D" d="M256 48C141.31 48 48 141.31 48 256s93.31 208 208 208s208-93.31 208-208S370.69 48 256 48m48.19 121.42l24.1 21.06l-73.61 84.1l-24.1-23.06ZM191.93 342.63L121.37 272L144 249.37L214.57 320Zm65 .79L185.55 272l22.64-22.62l47.16 47.21l111.13-127.17l24.1 21.06Z" />
+                                            </svg>
+                                        </div>
+                                        <h2 style={{ marginBottom: '1rem' }}>You're on the list!</h2>
+                                        <p className="popup-desc" style={{ marginBottom: '2rem' }}>
+                                            Thank you for joining Legae. We've sent a confirmation to <strong style={{ color: '#1a1a1a' }}>{waitlistEmail}</strong>.
+                                            We'll be in touch soon with exclusive updates!
+                                        </p>
+                                        <button
+                                            className="try-free-btn"
+                                            onClick={handleClosePopup}
+                                            style={{ width: '100%', background: '#1a1a1a' }}
+                                        >
+                                            Close
+                                        </button>
+                                    </div>
                                 )}
                                 <p className="popup-footer-text" style={{ marginTop: '1.5rem' }}>We promise not to spam you. Safety and discretion are our priorities.</p>
                             </div>
                         </div>
                     </div>
                 </div>
-            )}
+            )
+            }
 
             {/* Privacy Policy Modal */}
-            {showPrivacy && (
-                <div className="popup-overlay privacy-modal-overlay" onClick={() => setShowPrivacy(false)}>
-                    <div className="waitlist-popup privacy-popup" onClick={(e) => e.stopPropagation()}>
-                        <button className="close-popup" onClick={() => setShowPrivacy(false)}>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M5 5l14 14M5 19l14 -14"><animate fill="freeze" attributeName="d" dur="0.4s" values="M5 5l14 0M5 19l14 0;M5 5l14 14M5 19l14 -14" /></path><path d="M12 12h0"><animate fill="freeze" attributeName="d" dur="0.4s" values="M5 12h14;M12 12h0" /><set fill="freeze" attributeName="opacity" begin="0.4s" to="0" /></path></g></svg>
-                        </button>
-                        <div className="privacy-content-wrapper" style={{ padding: '6rem 4rem 4rem 4rem' }}>
-                            <h2 style={{ fontSize: '2.5rem', marginBottom: '3rem', color: '#1a1a1a', textAlign: 'left' }}>Privacy Policy</h2>
+            {
+                showPrivacy && (
+                    <div className="popup-overlay privacy-modal-overlay" onClick={() => setShowPrivacy(false)}>
+                        <div className="waitlist-popup privacy-popup" onClick={(e) => e.stopPropagation()}>
+                            <button className="close-popup" onClick={() => setShowPrivacy(false)}>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M5 5l14 14M5 19l14 -14"><animate fill="freeze" attributeName="d" dur="0.4s" values="M5 5l14 0M5 19l14 0;M5 5l14 14M5 19l14 -14" /></path><path d="M12 12h0"><animate fill="freeze" attributeName="d" dur="0.4s" values="M5 12h14;M12 12h0" /><set fill="freeze" attributeName="opacity" begin="0.4s" to="0" /></path></g></svg>
+                            </button>
+                            <div className="privacy-content-wrapper" style={{ padding: '6rem 4rem 4rem 4rem' }}>
+                                <h2 style={{ fontSize: '2.5rem', marginBottom: '3rem', color: '#1a1a1a', textAlign: 'left' }}>Privacy Policy</h2>
 
-                            <div className="privacy-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '3rem', color: '#666', lineHeight: '1.7', fontSize: '0.95rem' }}>
-                                <div className="privacy-section">
-                                    <h3 style={{ color: '#1a1a1a', marginBottom: '1rem' }}>1. Introduction</h3>
-                                    <p>Welcome to Legae. We respect your privacy and are committed to protecting your personal data. This policy informs you about how we handle your data when you visit our website or app.</p>
-                                </div>
+                                <div className="privacy-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '3rem', color: '#666', lineHeight: '1.7', fontSize: '0.95rem' }}>
+                                    <div className="privacy-section">
+                                        <h3 style={{ color: '#1a1a1a', marginBottom: '1rem' }}>1. Introduction</h3>
+                                        <p>Welcome to Legae. We respect your privacy and are committed to protecting your personal data. This policy informs you about how we handle your data when you visit our website or app.</p>
+                                    </div>
 
-                                <div className="privacy-section">
-                                    <h3 style={{ color: '#1a1a1a', marginBottom: '1rem' }}>2. Data We Collect</h3>
-                                    <p>At this stage, we only collect and process your email address when you voluntarily provide it to join our waitlist.</p>
-                                </div>
+                                    <div className="privacy-section">
+                                        <h3 style={{ color: '#1a1a1a', marginBottom: '1rem' }}>2. Data We Collect</h3>
+                                        <p>At this stage, we only collect and process your email address when you voluntarily provide it to join our waitlist.</p>
+                                    </div>
 
-                                <div className="privacy-section">
-                                    <h3 style={{ color: '#1a1a1a', marginBottom: '1rem' }}>3. How We Use Your Data</h3>
-                                    <p>We use your email address to share updates on our journey, invite you to our beta testing phase, and receive your valuable feedback to improve Legae before our official launch.</p>
-                                </div>
+                                    <div className="privacy-section">
+                                        <h3 style={{ color: '#1a1a1a', marginBottom: '1rem' }}>3. How We Use Your Data</h3>
+                                        <p>We use your email address to share updates on our journey, invite you to our beta testing phase, and receive your valuable feedback to improve Legae before our official launch.</p>
+                                    </div>
 
-                                <div className="privacy-section">
-                                    <h3 style={{ color: '#1a1a1a', marginBottom: '1rem' }}>4. Data Security</h3>
-                                    <p>We have implement appropriate security measures to prevent your personal data from being accidentally lost, used or accessed in an unauthorized way.</p>
-                                </div>
+                                    <div className="privacy-section">
+                                        <h3 style={{ color: '#1a1a1a', marginBottom: '1rem' }}>4. Data Security</h3>
+                                        <p>We have implement appropriate security measures to prevent your personal data from being accidentally lost, used or accessed in an unauthorized way.</p>
+                                    </div>
 
-                                <div className="privacy-section" style={{ gridColumn: 'span 2' }}>
-                                    <h3 style={{ color: '#1a1a1a', marginBottom: '1rem' }}>5. Your Legal Rights</h3>
-                                    <p>You have rights under data protection laws to request access, correction, or erasure of your personal data. Contact us to exercise these rights.</p>
+                                    <div className="privacy-section" style={{ gridColumn: 'span 2' }}>
+                                        <h3 style={{ color: '#1a1a1a', marginBottom: '1rem' }}>5. Your Legal Rights</h3>
+                                        <p>You have rights under data protection laws to request access, correction, or erasure of your personal data. Contact us to exercise these rights.</p>
+                                    </div>
                                 </div>
+                                <p style={{ marginTop: '3rem', textAlign: 'center', color: '#999', fontSize: '0.85rem' }}>Last updated: {new Date().toLocaleDateString()}</p>
                             </div>
-                            <p style={{ marginTop: '3rem', textAlign: 'center', color: '#999', fontSize: '0.85rem' }}>Last updated: {new Date().toLocaleDateString()}</p>
                         </div>
                     </div>
-                </div>
-            )}
-        </div>
+                )
+            }
+        </div >
     );
 };
 

@@ -639,8 +639,8 @@ body {
         height: auto;
         max-height: 45vh;
         object-fit: contain;
-        margin-left: 10%;
-        /* Shifted right */
+        margin-left: 40%;
+        /* Shifted even further right */
     }
 
     .features,
@@ -797,6 +797,16 @@ body {
     to {
         transform: scale(1);
         opacity: 1;
+    }
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
     }
 }
 
