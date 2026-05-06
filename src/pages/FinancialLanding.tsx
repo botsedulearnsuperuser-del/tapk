@@ -41,7 +41,7 @@ const FinancialLanding: React.FC<FinancialLandingProps> = ({ onNavigateToSignup 
             <a href="#contact">Contact</a>
           </nav>
           <div className="header-actions">
-            <a href="#login" className="login-link">Login</a>
+            <a href="/signin" className="login-link">Login</a>
             <button className="btn btn-primary btn-member" onClick={onNavigateToSignup}>Create business card</button>
           </div>
         </div>
@@ -279,6 +279,26 @@ const FinancialLanding: React.FC<FinancialLandingProps> = ({ onNavigateToSignup 
               <button type="button" className="btn btn-primary w-full">Book Appointment</button>
             </form>
           </div>
+        </div>
+
+        {/* MAP */}
+        <div style={{ width: '100%', marginTop: '3rem', borderRadius: '0', overflow: 'hidden', border: '1px solid #e1e5eb' }}>
+          <div style={{ background: '#082E54', padding: '1.25rem 2rem', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 512 512" style={{ color: '#37DFD3', flexShrink: 0 }}>
+              <path fill="currentColor" d="M256 0C149.3 0 64 85.3 64 192c0 36.9 11 65.4 30.1 94.3l141.7 215c4.3 6.5 11.7 10.7 20.2 10.7s16-4.3 20.2-10.7l141.7-215C437 257.4 448 228.9 448 192C448 85.3 362.7 0 256 0m0 298.6c-58.9 0-106.7-47.8-106.7-106.8S197.1 85 256 85s106.7 47.8 106.7 106.8S314.9 298.6 256 298.6"/>
+            </svg>
+            <span style={{ color: 'white', fontWeight: '700', fontSize: '1rem' }}>Find Us — Gaborone, Botswana</span>
+          </div>
+          <iframe
+            title="TapK Location - Gaborone, Botswana"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d116017.83113897576!2d25.845599!3d-24.654949!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1ebf6f77b7e1dc63%3A0x6b8c4a6e4e13c39e!2sGaborone%2C%20Botswana!5e0!3m2!1sen!2sus!4v1715000000000"
+            width="100%"
+            height="380"
+            style={{ border: 0, display: 'block' }}
+            allowFullScreen
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+          />
         </div>
       </section>
 

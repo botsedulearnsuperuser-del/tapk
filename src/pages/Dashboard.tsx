@@ -28,6 +28,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
   const [portfolioType, setPortfolioType] = useState<string | null>(null);
   const [helper, setHelper] = useState('Classic Card');
   const [feeling, setFeeling] = useState<string | null>('happy');
+  const [editStep, setEditStep] = useState(1);
 
 
   // Profile State
@@ -46,7 +47,8 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
     facebook: '',
     whatsapp: '',
     youtube: '',
-    discord: ''
+    discord: '',
+    themeColor: '#082E54'
   });
 
   const handleStartNow = () => {
@@ -165,7 +167,12 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem', borderBottom: '2px solid var(--dash-primary-light)', paddingBottom: '0.5rem' }}>
                         <h2 className="dash-form-title" style={{ margin: 0, borderBottom: 'none', paddingBottom: 0 }}>Edit Digital Profile</h2>
                         <div style={{ display: 'flex', gap: '0.75rem' }}>
-                          <button className="dash-btn dash-btn-outline" onClick={() => setPortfolioType(null)} style={{ fontSize: '0.8rem', padding: '0.5rem 1rem' }}>Cancel</button>
+                          {editStep === 1 ? (
+                            <button className="dash-btn dash-btn-primary" onClick={() => setEditStep(2)} style={{ fontSize: '0.8rem', padding: '0.5rem 1.25rem' }}>Next</button>
+                          ) : (
+                            <button className="dash-btn dash-btn-outline" onClick={() => setEditStep(1)} style={{ fontSize: '0.8rem', padding: '0.5rem 1.25rem' }}>Back</button>
+                          )}
+                          <button className="dash-btn dash-btn-outline" onClick={() => { setPortfolioType(null); setEditStep(1); }} style={{ fontSize: '0.8rem', padding: '0.5rem 1rem' }}>Cancel</button>
                           <button 
                             className="dash-btn dash-btn-primary" 
                             onClick={handleSubmit}
@@ -206,230 +213,266 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
                       </div>
                     ) : (
                       <React.Fragment>
-                        <div className="dash-form-grid">
-                          {/* Left Column */}
-                          <div className="dash-form-col">
-                            <div className="dash-form-group">
-                              <label>Profile Image</label>
-                              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                                <img src="/images/testimonial_1.png" alt="Profile" className="dash-avatar" style={{ width: '60px', height: '60px' }} />
-                                <button className="dash-btn dash-btn-outline" style={{ fontSize: '0.75rem', padding: '0.4rem 0.8rem' }}>Upload Image</button>
+                        {editStep === 1 ? (
+                          <div className="dash-form-grid">
+                            {/* Left Column */}
+                            <div className="dash-form-col">
+                              <div className="dash-form-group">
+                                <label>Profile Image</label>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                                  <img src="/images/testimonial_1.png" alt="Profile" className="dash-avatar" style={{ width: '60px', height: '60px' }} />
+                                  <button className="dash-btn dash-btn-outline" style={{ fontSize: '0.75rem', padding: '0.4rem 0.8rem' }}>Upload Image</button>
+                                </div>
+                              </div>
+
+                              <div className="dash-form-group">
+                                <label>Full Name</label>
+                                <input
+                                  type="text"
+                                  className="dash-input"
+                                  value={profileData.name}
+                                  onChange={(e) => setProfileData({ ...profileData, name: e.target.value })}
+                                />
+                              </div>
+
+                              <div className="dash-form-group">
+                                <label>Position of Work</label>
+                                <input
+                                  type="text"
+                                  className="dash-input"
+                                  value={profileData.position}
+                                  onChange={(e) => setProfileData({ ...profileData, position: e.target.value })}
+                                />
+                              </div>
+
+                              <div className="dash-form-group">
+                                <label>Location</label>
+                                <input
+                                  type="text"
+                                  className="dash-input"
+                                  value={profileData.location}
+                                  onChange={(e) => setProfileData({ ...profileData, location: e.target.value })}
+                                />
+                              </div>
+
+                              <div className="dash-form-group">
+                                <label>Company Details</label>
+                                <input
+                                  type="text"
+                                  className="dash-input"
+                                  value={profileData.companyDetail}
+                                  onChange={(e) => setProfileData({ ...profileData, companyDetail: e.target.value })}
+                                />
+                              </div>
+
+                              <div className="dash-form-group">
+                                <label>Link a new NFC Device</label>
+                                <select
+                                  className="dash-select"
+                                  value={helper}
+                                  onChange={(e) => setHelper(e.target.value)}
+                                >
+                                  <option value="Classic Card">TapK Classic Card</option>
+                                  <option value="Wood Card">TapK Bamboo Card</option>
+                                  <option value="Metal Card">TapK Stainless Steel</option>
+                                  <option value="Key Fob">TapK Key Fob</option>
+                                </select>
                               </div>
                             </div>
 
-                            <div className="dash-form-group">
-                              <label>Full Name</label>
-                              <input
-                                type="text"
-                                className="dash-input"
-                                value={profileData.name}
-                                onChange={(e) => setProfileData({ ...profileData, name: e.target.value })}
-                              />
-                            </div>
+                            {/* Right Column */}
+                            <div className="dash-form-col">
+                              <div className="dash-form-group">
+                                <label>Contact Details</label>
+                                <input
+                                  type="text"
+                                  className="dash-input"
+                                  value={profileData.contacts}
+                                  onChange={(e) => setProfileData({ ...profileData, contacts: e.target.value })}
+                                />
+                              </div>
 
-                            <div className="dash-form-group">
-                              <label>Position of Work</label>
-                              <input
-                                type="text"
-                                className="dash-input"
-                                value={profileData.position}
-                                onChange={(e) => setProfileData({ ...profileData, position: e.target.value })}
-                              />
-                            </div>
+                              <div className="dash-form-group">
+                                <label>Website / Portfolio</label>
+                                <input
+                                  type="text"
+                                  className="dash-input"
+                                  value={profileData.website}
+                                  onChange={(e) => setProfileData({ ...profileData, website: e.target.value })}
+                                />
+                              </div>
 
-                            <div className="dash-form-group">
-                              <label>Location</label>
-                              <input
-                                type="text"
-                                className="dash-input"
-                                value={profileData.location}
-                                onChange={(e) => setProfileData({ ...profileData, location: e.target.value })}
-                              />
-                            </div>
-
-                            <div className="dash-form-group">
-                              <label>Company Details</label>
-                              <input
-                                type="text"
-                                className="dash-input"
-                                value={profileData.companyDetail}
-                                onChange={(e) => setProfileData({ ...profileData, companyDetail: e.target.value })}
-                              />
-                            </div>
-
-                            <div className="dash-form-group">
-                              <label>Link a new NFC Device</label>
-                              <select
-                                className="dash-select"
-                                value={helper}
-                                onChange={(e) => setHelper(e.target.value)}
-                              >
-                                <option value="Classic Card">TapK Classic Card</option>
-                                <option value="Wood Card">TapK Bamboo Card</option>
-                                <option value="Metal Card">TapK Stainless Steel</option>
-                                <option value="Key Fob">TapK Key Fob</option>
-                              </select>
-                            </div>
-                          </div>
-
-                          {/* Right Column */}
-                          <div className="dash-form-col">
-                            <div className="dash-form-group">
-                              <label>Contact Details</label>
-                              <input
-                                type="text"
-                                className="dash-input"
-                                value={profileData.contacts}
-                                onChange={(e) => setProfileData({ ...profileData, contacts: e.target.value })}
-                              />
-                            </div>
-
-                            <div className="dash-form-group">
-                              <label>Website / Portfolio</label>
-                              <input
-                                type="text"
-                                className="dash-input"
-                                value={profileData.website}
-                                onChange={(e) => setProfileData({ ...profileData, website: e.target.value })}
-                              />
-                            </div>
-
-                            <div className="dash-form-group">
-                               <label>Social Media / Network (3x3 Grid)</label>
-                               <div style={{ 
-                                 display: 'grid', 
-                                 gridTemplateColumns: 'repeat(3, 1fr)', 
-                                 gap: '0.75rem',
-                                 padding: '1rem', 
-                                 border: '1px solid var(--dash-border)', 
-                                 background: 'var(--dash-bg)',
-                                 maxHeight: '250px',
-                                 overflowY: 'auto'
-                               }}>
-                                 <div className="dash-form-group" style={{ marginBottom: '0' }}>
-                                   <label style={{ fontSize: '0.7rem' }}>LinkedIn</label>
-                                   <input
-                                     type="text"
-                                     className="dash-input"
-                                     style={{ padding: '0.5rem', fontSize: '0.8rem' }}
-                                     value={profileData.linkedin}
-                                     onChange={(e) => setProfileData({ ...profileData, linkedin: e.target.value })}
-                                     placeholder="@user"
-                                   />
-                                 </div>
-                                 <div className="dash-form-group" style={{ marginBottom: '0' }}>
-                                   <label style={{ fontSize: '0.7rem' }}>Twitter / X</label>
-                                   <input
-                                     type="text"
-                                     className="dash-input"
-                                     style={{ padding: '0.5rem', fontSize: '0.8rem' }}
-                                     value={profileData.twitter}
-                                     onChange={(e) => setProfileData({ ...profileData, twitter: e.target.value })}
-                                     placeholder="@user"
-                                   />
-                                 </div>
-                                 <div className="dash-form-group" style={{ marginBottom: '0' }}>
-                                   <label style={{ fontSize: '0.7rem' }}>Instagram</label>
-                                   <input
-                                     type="text"
-                                     className="dash-input"
-                                     style={{ padding: '0.5rem', fontSize: '0.8rem' }}
-                                     value={profileData.instagram}
-                                     onChange={(e) => setProfileData({ ...profileData, instagram: e.target.value })}
-                                     placeholder="@user"
-                                   />
-                                 </div>
-                                 <div className="dash-form-group" style={{ marginBottom: '0' }}>
-                                   <label style={{ fontSize: '0.7rem' }}>TikTok</label>
-                                   <input
-                                     type="text"
-                                     className="dash-input"
-                                     style={{ padding: '0.5rem', fontSize: '0.8rem' }}
-                                     value={profileData.tiktok}
-                                     onChange={(e) => setProfileData({ ...profileData, tiktok: e.target.value })}
-                                     placeholder="@user"
-                                   />
-                                 </div>
-                                 <div className="dash-form-group" style={{ marginBottom: '0' }}>
-                                   <label style={{ fontSize: '0.7rem' }}>Facebook</label>
-                                   <input
-                                     type="text"
-                                     className="dash-input"
-                                     style={{ padding: '0.5rem', fontSize: '0.8rem' }}
-                                     value={profileData.facebook}
-                                     onChange={(e) => setProfileData({ ...profileData, facebook: e.target.value })}
-                                     placeholder="@user"
-                                   />
-                                 </div>
-                                 <div className="dash-form-group" style={{ marginBottom: '0' }}>
-                                   <label style={{ fontSize: '0.7rem' }}>WhatsApp</label>
-                                   <input
-                                     type="text"
-                                     className="dash-input"
-                                     style={{ padding: '0.5rem', fontSize: '0.8rem' }}
-                                     placeholder="+267..."
-                                   />
-                                 </div>
-                                 <div className="dash-form-group" style={{ marginBottom: '0' }}>
-                                   <label style={{ fontSize: '0.7rem' }}>YouTube</label>
-                                   <input
-                                     type="text"
-                                     className="dash-input"
-                                     style={{ padding: '0.5rem', fontSize: '0.8rem' }}
-                                     placeholder="@channel"
-                                   />
-                                 </div>
-                                 <div className="dash-form-group" style={{ marginBottom: '0' }}>
-                                   <label style={{ fontSize: '0.7rem' }}>Snapchat</label>
-                                   <input
-                                     type="text"
-                                     className="dash-input"
-                                     style={{ padding: '0.5rem', fontSize: '0.8rem' }}
-                                     placeholder="@user"
-                                   />
-                                 </div>
-                                 <div className="dash-form-group" style={{ marginBottom: '0' }}>
-                                   <label style={{ fontSize: '0.7rem' }}>Discord</label>
-                                   <input
-                                     type="text"
-                                     className="dash-input"
-                                     style={{ padding: '0.5rem', fontSize: '0.8rem' }}
-                                     placeholder="user#0000"
-                                   />
+                              <div className="dash-form-group">
+                                 <label>Social Media / Network (3x3 Grid)</label>
+                                 <div style={{ 
+                                   display: 'grid', 
+                                   gridTemplateColumns: 'repeat(3, 1fr)', 
+                                   gap: '0.75rem',
+                                   padding: '1rem', 
+                                   border: '1px solid var(--dash-border)', 
+                                   background: 'var(--dash-bg)',
+                                   maxHeight: '250px',
+                                   overflowY: 'auto'
+                                 }}>
+                                   <div className="dash-form-group" style={{ marginBottom: '0' }}>
+                                     <label style={{ fontSize: '0.7rem' }}>LinkedIn</label>
+                                     <input
+                                       type="text"
+                                       className="dash-input"
+                                       style={{ padding: '0.5rem', fontSize: '0.8rem' }}
+                                       value={profileData.linkedin}
+                                       onChange={(e) => setProfileData({ ...profileData, linkedin: e.target.value })}
+                                       placeholder="@user"
+                                     />
+                                   </div>
+                                   <div className="dash-form-group" style={{ marginBottom: '0' }}>
+                                     <label style={{ fontSize: '0.7rem' }}>Twitter / X</label>
+                                     <input
+                                       type="text"
+                                       className="dash-input"
+                                       style={{ padding: '0.5rem', fontSize: '0.8rem' }}
+                                       value={profileData.twitter}
+                                       onChange={(e) => setProfileData({ ...profileData, twitter: e.target.value })}
+                                       placeholder="@user"
+                                     />
+                                   </div>
+                                   <div className="dash-form-group" style={{ marginBottom: '0' }}>
+                                     <label style={{ fontSize: '0.7rem' }}>Instagram</label>
+                                     <input
+                                       type="text"
+                                       className="dash-input"
+                                       style={{ padding: '0.5rem', fontSize: '0.8rem' }}
+                                       value={profileData.instagram}
+                                       onChange={(e) => setProfileData({ ...profileData, instagram: e.target.value })}
+                                       placeholder="@user"
+                                     />
+                                   </div>
+                                   <div className="dash-form-group" style={{ marginBottom: '0' }}>
+                                     <label style={{ fontSize: '0.7rem' }}>TikTok</label>
+                                     <input
+                                       type="text"
+                                       className="dash-input"
+                                       style={{ padding: '0.5rem', fontSize: '0.8rem' }}
+                                       value={profileData.tiktok}
+                                       onChange={(e) => setProfileData({ ...profileData, tiktok: e.target.value })}
+                                       placeholder="@user"
+                                     />
+                                   </div>
+                                   <div className="dash-form-group" style={{ marginBottom: '0' }}>
+                                     <label style={{ fontSize: '0.7rem' }}>Facebook</label>
+                                     <input
+                                       type="text"
+                                       className="dash-input"
+                                       style={{ padding: '0.5rem', fontSize: '0.8rem' }}
+                                       value={profileData.facebook}
+                                       onChange={(e) => setProfileData({ ...profileData, facebook: e.target.value })}
+                                       placeholder="@user"
+                                     />
+                                   </div>
+                                   <div className="dash-form-group" style={{ marginBottom: '0' }}>
+                                     <label style={{ fontSize: '0.7rem' }}>WhatsApp</label>
+                                     <input
+                                       type="text"
+                                       className="dash-input"
+                                       style={{ padding: '0.5rem', fontSize: '0.8rem' }}
+                                       value={profileData.whatsapp}
+                                       onChange={(e) => setProfileData({ ...profileData, whatsapp: e.target.value })}
+                                       placeholder="+267..."
+                                     />
+                                   </div>
+                                   <div className="dash-form-group" style={{ marginBottom: '0' }}>
+                                     <label style={{ fontSize: '0.7rem' }}>YouTube</label>
+                                     <input
+                                       type="text"
+                                       className="dash-input"
+                                       style={{ padding: '0.5rem', fontSize: '0.8rem' }}
+                                       value={profileData.youtube}
+                                       onChange={(e) => setProfileData({ ...profileData, youtube: e.target.value })}
+                                       placeholder="@channel"
+                                     />
+                                   </div>
+                                   <div className="dash-form-group" style={{ marginBottom: '0' }}>
+                                     <label style={{ fontSize: '0.7rem' }}>Snapchat</label>
+                                     <input
+                                       type="text"
+                                       className="dash-input"
+                                       style={{ padding: '0.5rem', fontSize: '0.8rem' }}
+                                       placeholder="@user"
+                                     />
+                                   </div>
+                                   <div className="dash-form-group" style={{ marginBottom: '0' }}>
+                                     <label style={{ fontSize: '0.7rem' }}>Discord</label>
+                                     <input
+                                       type="text"
+                                       className="dash-input"
+                                       style={{ padding: '0.5rem', fontSize: '0.8rem' }}
+                                       value={profileData.discord}
+                                       onChange={(e) => setProfileData({ ...profileData, discord: e.target.value })}
+                                       placeholder="user#0000"
+                                     />
+                                   </div>
                                  </div>
                                </div>
-                             </div>
-
-                            <div className="dash-form-group">
-                              <label>Select Profile Theme Color</label>
-                              <div className="dash-emoji-group" style={{ justifyContent: 'center', gap: '1rem' }}>
-                                {feelingIcons.map((f, idx) => (
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="dash-form-step-2" style={{ padding: '1.5rem' }}>
+                            <div className="dash-form-group" style={{ marginBottom: '2.5rem' }}>
+                              <label style={{ fontSize: '1.2rem', fontWeight: '700', color: 'var(--dash-primary)', marginBottom: '1rem', display: 'block' }}>Select Profile Theme Color</label>
+                              <p style={{ fontSize: '0.9rem', color: 'var(--dash-text-muted)', marginBottom: '1.5rem' }}>Choose a color that represents your brand or personality.</p>
+                              <div style={{ display: 'flex', gap: '1.25rem', flexWrap: 'wrap' }}>
+                                {['#082E54', '#37DFD3', '#8a0000', '#1a1a1a', '#4a90e2', '#7ed321', '#f5a623', '#bd10e0'].map(color => (
                                   <button
-                                    key={idx}
+                                    key={color}
                                     type="button"
-                                    title={f.value}
-                                    className={`dash-emoji-btn ${feeling === f.value ? 'selected' : ''}`}
-                                    onClick={() => setFeeling(f.value)}
-                                    style={{ width: '40px', height: '40px', color: feeling === f.value ? 'white' : 'var(--dash-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                                    onClick={() => setProfileData({ ...profileData, themeColor: color })}
+                                    style={{ 
+                                      width: '50px', 
+                                      height: '50px', 
+                                      borderRadius: '12px', 
+                                      backgroundColor: color, 
+                                      border: profileData.themeColor === color ? '4px solid #37DFD3' : '2px solid transparent',
+                                      boxShadow: profileData.themeColor === color ? '0 0 15px rgba(55, 223, 211, 0.4)' : '0 2px 8px rgba(0,0,0,0.1)',
+                                      cursor: 'pointer',
+                                      transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                                      position: 'relative'
+                                    }}
                                   >
-                                    {f.icon}
+                                    {profileData.themeColor === color && (
+                                      <div style={{ position: 'absolute', top: '-8px', right: '-8px', background: '#37DFD3', borderRadius: '50%', padding: '2px' }}>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                      </div>
+                                    )}
                                   </button>
                                 ))}
                               </div>
                             </div>
-                          </div>
-                        </div>
 
-                        <div className="dash-form-group" style={{ marginTop: '2rem' }}>
-                          <label>Profile Summary</label>
-                          <textarea
-                            className="dash-textarea"
-                            rows={2}
-                            value={profileData.summary}
-                            onChange={(e) => setProfileData({ ...profileData, summary: e.target.value })}
-                            placeholder="Help people know you better..."
-                          />
-                        </div>
+                            <div className="dash-form-group">
+                              <label style={{ fontSize: '1.2rem', fontWeight: '700', color: 'var(--dash-primary)', marginBottom: '1rem', display: 'block' }}>Profile Summary / Bio</label>
+                              <p style={{ fontSize: '0.9rem', color: 'var(--dash-text-muted)', marginBottom: '1rem' }}>Write a short introduction that will be visible to everyone who taps your card.</p>
+                              <textarea
+                                className="dash-input"
+                                rows={8}
+                                style={{ 
+                                  resize: 'none', 
+                                  padding: '1.25rem', 
+                                  fontSize: '1rem', 
+                                  lineHeight: '1.6',
+                                  borderRadius: '12px',
+                                  border: '1px solid var(--dash-border)',
+                                  background: 'white'
+                                }}
+                                placeholder="Example: Helping businesses scale through innovation and design..."
+                                value={profileData.summary}
+                                onChange={(e) => setProfileData({ ...profileData, summary: e.target.value })}
+                              />
+                              <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '0.5rem' }}>
+                                <span style={{ fontSize: '0.8rem', color: 'var(--dash-text-muted)' }}>{profileData.summary.length} characters</span>
+                              </div>
+                            </div>
+                          </div>
+                        )}
 
 
                       </React.Fragment>

@@ -17,7 +17,7 @@ const SignUp: React.FC<SignUpProps> = ({ onNavigateToDashboard }) => {
         </div>
         
         <div className="su-left-content">
-          <h1 className="su-title">Your Digital Business Card Reimagined</h1>
+          
           <p className="su-subtitle">Join thousands of professionals using TapK to share their contact info instantly with NFC technology.</p>
           
           <div className="su-feature-image-container">
@@ -77,6 +77,10 @@ const SignUp: React.FC<SignUpProps> = ({ onNavigateToDashboard }) => {
             <p className="su-terms-text">
               By signing up, you are consenting to our <a href="#">Terms of Service</a> and confirming that you have reviewed and accepted the <a href="#">TapK Privacy Policy</a>.
             </p>
+            
+            <div className="su-signin-link" style={{ textAlign: 'center', marginTop: '1rem', fontSize: '0.9rem', color: 'var(--su-text-grey)' }}>
+              Already have an account? <a href="/signin" style={{ color: 'var(--su-primary)', fontWeight: '600', textDecoration: 'none' }}>Sign In</a>
+            </div>
             
             <button type="submit" className="su-submit-btn">Get Started</button>
           </form>

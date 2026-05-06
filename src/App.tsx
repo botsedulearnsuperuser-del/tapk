@@ -3,6 +3,7 @@ import FinancialLanding from './pages/FinancialLanding';
 import SignUp from './pages/SignUp';
 import Dashboard from './pages/Dashboard';
 import Profile from './pages/Profile';
+import SignIn from './pages/SignIn';
 import './App.css';
 
 function App() {
@@ -13,6 +14,7 @@ function App() {
       <Routes>
         <Route path="/" element={<FinancialLanding onNavigateToSignup={() => navigate('/signup')} />} />
         <Route path="/signup" element={<SignUp onNavigateToDashboard={() => navigate('/dashboard')} />} />
+        <Route path="/signin" element={<SignIn onNavigateToDashboard={() => navigate('/dashboard')} />} />
         <Route path="/dashboard" element={<Dashboard onLogout={() => navigate('/')} />} />
         <Route path="/profile" element={<Profile />} />
       </Routes>
