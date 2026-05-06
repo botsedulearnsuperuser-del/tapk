@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-
   ChevronDown,
   Share2,
-  ExternalLink,
   ArrowLeft,
   Menu,
   X
@@ -45,7 +43,10 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
     twitter: '@thabo_x',
     instagram: '@thabo_insta',
     tiktok: '',
-    facebook: ''
+    facebook: '',
+    whatsapp: '',
+    youtube: '',
+    discord: ''
   });
 
   const handleStartNow = () => {
