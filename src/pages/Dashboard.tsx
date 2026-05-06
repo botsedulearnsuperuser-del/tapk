@@ -13,13 +13,6 @@ interface DashboardProps {
   onLogout?: () => void;
 }
 
-const feelingIcons = [
-  { value: 'angry', icon: <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24"><path fill="currentColor" d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10s-4.477 10-10 10m-5-5h2a3 3 0 1 1 6 0h2a5 5 0 0 0-10 0m1-6a1.5 1.5 0 1 0 0-3a1.5 1.5 0 0 0 0 3m8 0a1.5 1.5 0 1 0 0-3a1.5 1.5 0 0 0 0 3" /></svg> },
-  { value: 'sad', icon: <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2c5.523 0 10 4.477 10 10a9.96 9.96 0 0 1-1.065 4.496a2 2 0 0 0-.398-.775l-.123-.135L19 14.172l-1.414 1.414l-.117.127a2 2 0 0 0 1.679 3.282A9.97 9.97 0 0 1 12 22C6.477 22 2 17.523 2 12S6.477 2 12 2m0 13c-1.38 0-2.63.56-3.534 1.463l-.166.174l.945.86C10.035 17.182 10.982 17 12 17c.905 0 1.754.144 2.486.396l.269.1l.945-.86A5 5 0 0 0 12 15m-3.5-5a1.5 1.5 0 1 0 0 3a1.5 1.5 0 0 0 0-3m7 0a1.5 1.5 0 1 0 0 3a1.5 1.5 0 0 0 0-3" /></svg> },
-  { value: 'neutral', icon: <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24"><path fill="currentColor" d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10s-4.477 10-10 10m-4-9a4 4 0 0 0 8 0zm0-2a1.5 1.5 0 1 0 0-3a1.5 1.5 0 0 0 0 3m8 0a1.5 1.5 0 1 0 0-3a1.5 1.5 0 0 0 0 3" /></svg> },
-  { value: 'happy', icon: <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24"><path fill="currentColor" d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2M8.5 8c.83 0 1.5.67 1.5 1.5S9.33 11 8.5 11S7 10.33 7 9.5S7.67 8 8.5 8M12 18c-2.28 0-4.22-1.66-5-4h10c-.78 2.34-2.72 4-5 4m3.5-7c-.83 0-1.5-.67-1.5-1.5S14.67 8 15.5 8s1.5.67 1.5 1.5s-.67 1.5-1.5 1.5" /></svg> }
-];
-
 const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
   const [activeNav, setActiveNav] = useState<'dashboard' | 'why'>('dashboard');
   const [viewMode, setViewMode] = useState<'prompt' | 'started' | 'completed' | 'profile'>('prompt');
@@ -27,7 +20,6 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
   const navigate = useNavigate();
   const [portfolioType, setPortfolioType] = useState<string | null>(null);
   const [helper, setHelper] = useState('Classic Card');
-  const [feeling, setFeeling] = useState<string | null>('happy');
   const [editStep, setEditStep] = useState(1);
 
 
