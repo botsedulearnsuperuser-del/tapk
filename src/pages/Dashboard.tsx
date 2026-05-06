@@ -52,7 +52,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
   };
 
   const handleSubmit = () => {
-    if (portfolioType && feeling) {
+    if (portfolioType) {
       setViewMode('completed');
     }
   };
