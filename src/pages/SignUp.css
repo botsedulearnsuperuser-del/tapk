@@ -467,7 +467,7 @@
 
   .su-left {
     max-width: 100%;
-    padding: 0.5rem 1rem; /* Extremely minimal padding */
+    padding: 0.25rem 0.75rem; /* Bare minimum padding */
     min-height: auto;
   }
 
@@ -476,13 +476,13 @@
   }
 
   .su-logo {
-    font-size: 0.9rem; /* Smaller logo */
-    padding: 0.25rem 0.75rem;
+    font-size: 0.8rem; /* Tiny logo */
+    padding: 0.2rem 0.5rem;
   }
 
   .su-logo svg {
-    width: 16px;
-    height: 16px;
+    width: 14px;
+    height: 14px;
   }
 
   .su-feature-image-container {
@@ -490,17 +490,21 @@
   }
 
   .su-title {
-    font-size: 1.2rem; /* Shrunk title */
-    margin-bottom: 0.15rem;
+    font-size: 1rem; /* Tiny title */
+    margin-bottom: 0.1rem;
   }
 
   .su-subtitle {
-    font-size: 0.75rem; /* Shrunk subtitle */
-    margin-bottom: 0.25rem;
+    font-size: 0.7rem; /* Tiny subtitle */
+    margin-bottom: 0.1rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
 
   .su-logo-wrapper {
-    margin-bottom: 0.25rem;
+    margin-bottom: 0.1rem;
   }
 
   .su-right {

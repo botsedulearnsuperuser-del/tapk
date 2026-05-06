@@ -135,7 +135,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
                 <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', marginTop: '1.5rem' }}>
                   <button className="dash-btn dash-btn-primary" onClick={handleSaveContact} style={{ padding: '0.75rem 1.5rem', fontSize: '0.85rem' }}>Save Contact</button>
                   <button className="dash-btn dash-btn-outline" onClick={() => setShowShareModal(true)} style={{ padding: '0.75rem 1.5rem', fontSize: '0.85rem' }}>
-                    <span className="mobile-hide-icon" style={{ display: 'flex', alignItems: 'center' }}><Share2 size={16} /></span> Share
+                    <span style={{ display: 'flex', alignItems: 'center' }}><Share2 size={16} /></span> Share
                   </button>
                 </div>
               </div>
