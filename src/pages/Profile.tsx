@@ -19,13 +19,26 @@ const profileData = {
   whatsapp: '',
   youtube: '',
   discord: '',
+  themeColor: '#082E54',
+  email: 'thabo@techpulse.co.bw',
+  secondaryPhone: '+267 72 999 888'
 };
 
 const Profile: React.FC = () => {
   const navigate = useNavigate();
+  const [showShareModal, setShowShareModal] = React.useState(false);
+  const [copied, setCopied] = React.useState(false);
+
+  const profileUrl = window.location.href;
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(profileUrl);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   const handleSaveContact = () => {
-    const vcard = `BEGIN:VCARD\nVERSION:3.0\nFN:${profileData.name}\nTITLE:${profileData.position}\nORG:${profileData.companyDetail}\nNOTE:${profileData.summary}\nURL:${profileData.website}\nX-SOCIALPROFILE;type=linkedin:${profileData.linkedin}\nX-SOCIALPROFILE;type=twitter:${profileData.twitter}\nX-SOCIALPROFILE;type=instagram:${profileData.instagram}\nEND:VCARD`;
+    const vcard = `BEGIN:VCARD\nVERSION:3.0\nFN:${profileData.name}\nTITLE:${profileData.position}\nORG:${profileData.companyDetail}\nNOTE:${profileData.summary}\nTEL;TYPE=CELL:${profileData.contacts}\nTEL;TYPE=WORK:${profileData.secondaryPhone}\nEMAIL;TYPE=INTERNET:${profileData.email}\nURL:${profileData.website}\nX-SOCIALPROFILE;type=linkedin:${profileData.linkedin}\nX-SOCIALPROFILE;type=twitter:${profileData.twitter}\nX-SOCIALPROFILE;type=instagram:${profileData.instagram}\nEND:VCARD`;
     const blob = new Blob([vcard], { type: 'text/vcard' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
@@ -42,7 +55,7 @@ const Profile: React.FC = () => {
       <div style={{ width: '100%', maxWidth: 'none', position: 'relative', overflow: 'hidden' }}>
 
         {/* Hero Cover */}
-        <div className="dash-profile-hero" style={{ height: '220px', background: 'linear-gradient(135deg, #082E54 0%, #0c437a 100%)' }}></div>
+        <div className="dash-profile-hero" style={{ height: '220px', background: `linear-gradient(135deg, ${profileData.themeColor} 0%, #0c437a 100%)` }}></div>
 
         {/* Back Button */}
         <button
@@ -64,17 +77,27 @@ const Profile: React.FC = () => {
                 style={{ width: '140px', height: '140px', borderRadius: '50%', border: '6px solid white', boxShadow: '0 10px 25px rgba(0,0,0,0.1)', objectFit: 'cover' }}
               />
               <h2 style={{ marginTop: '1rem', marginBottom: '0.25rem', color: 'var(--dash-primary)', fontSize: '1.8rem', fontWeight: '800' }}>{profileData.name}</h2>
-              <p style={{ fontWeight: '700', color: 'var(--dash-accent)', marginBottom: '0.25rem' }}>{profileData.position}</p>
-              <p style={{ fontSize: '0.9rem', color: 'var(--dash-text-muted)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 512 512" style={{ color: '#37DFD3' }}>
-                  <path fill="currentColor" d="M256 0C149.3 0 64 85.3 64 192c0 36.9 11 65.4 30.1 94.3l141.7 215c4.3 6.5 11.7 10.7 20.2 10.7s16-4.3 20.2-10.7l141.7-215C437 257.4 448 228.9 448 192C448 85.3 362.7 0 256 0m0 298.6c-58.9 0-106.7-47.8-106.7-106.8S197.1 85 256 85s106.7 47.8 106.7 106.8S314.9 298.6 256 298.6" />
-                </svg>
-                {profileData.location}
-              </p>
+              <p style={{ fontWeight: '700', color: 'var(--dash-accent)', marginBottom: '0.1rem' }}>{profileData.position}</p>
+              <p style={{ fontSize: '0.9rem', color: 'var(--dash-text-muted)', marginBottom: '0.5rem', fontWeight: '600' }}>{profileData.companyDetail}</p>
+              
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', alignItems: 'center' }}>
+                <p style={{ fontSize: '0.9rem', color: 'var(--dash-text-muted)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 512 512" style={{ color: profileData.themeColor }}>
+                    <path fill="currentColor" d="M256 0C149.3 0 64 85.3 64 192c0 36.9 11 65.4 30.1 94.3l141.7 215c4.3 6.5 11.7 10.7 20.2 10.7s16-4.3 20.2-10.7l141.7-215C437 257.4 448 228.9 448 192C448 85.3 362.7 0 256 0m0 298.6c-58.9 0-106.7-47.8-106.7-106.8S197.1 85 256 85s106.7 47.8 106.7 106.8S314.9 298.6 256 298.6" />
+                  </svg>
+                  {profileData.location}
+                </p>
+                <p style={{ fontSize: '0.9rem', color: 'var(--dash-text-muted)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" style={{ color: profileData.themeColor }}>
+                    <g fill="currentColor"><path d="M22 12A10 10 0 0 0 12 2v2a8 8 0 0 1 7.391 4.938A8 8 0 0 1 20 12zM2 10V5a1 1 0 0 1 1-1h5a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H6a8 8 0 0 0 8 8v-2a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1h-5C7.373 22 2 16.627 2 10"/><path d="M17.543 9.704A6 6 0 0 1 18 12h-1.8A4.2 4.2 0 0 0 12 7.8V6a6 6 0 0 1 5.543 3.704"/></g>
+                  </svg>
+                  {profileData.contacts}
+                </p>
+              </div>
 
               <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', marginTop: '1.5rem' }}>
                 <button className="dash-btn dash-btn-primary" onClick={handleSaveContact} style={{ padding: '0.75rem 1.5rem', fontSize: '0.85rem' }}>Save Contact</button>
-                <button className="dash-btn dash-btn-outline" style={{ padding: '0.75rem 1.5rem', fontSize: '0.85rem' }}>
+                <button className="dash-btn dash-btn-outline" onClick={() => setShowShareModal(true)} style={{ padding: '0.75rem 1.5rem', fontSize: '0.85rem' }}>
                   <Share2 size={16} /> Share
                 </button>
               </div>
@@ -94,6 +117,8 @@ const Profile: React.FC = () => {
                   { label: 'Twitter / X', value: profileData.twitter },
                   { label: 'Instagram', value: profileData.instagram },
                   { label: 'Website', value: profileData.website },
+                  { label: 'Email', value: profileData.email },
+                  { label: 'Secondary Phone', value: profileData.secondaryPhone },
                   { label: 'TikTok', value: profileData.tiktok },
                   { label: 'Facebook', value: profileData.facebook },
                   { label: 'WhatsApp', value: profileData.whatsapp },
@@ -112,6 +137,39 @@ const Profile: React.FC = () => {
 
           </div>
         </div>
+
+        {/* Share Modal */}
+        {showShareModal && (
+          <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100 }}>
+            <div style={{ background: 'white', padding: '2rem', borderRadius: '20px', width: '90%', maxWidth: '400px', textAlign: 'center', boxShadow: '0 20px 40px rgba(0,0,0,0.2)' }}>
+              <h3 style={{ color: 'var(--dash-primary)', marginBottom: '1rem' }}>Share Profile</h3>
+              <p style={{ fontSize: '0.9rem', color: 'var(--dash-text-muted)', marginBottom: '1.5rem' }}>Copy your unique profile URL to share it with others.</p>
+              
+              <div style={{ display: 'flex', gap: '0.5rem', background: '#f8f9fa', padding: '0.5rem', borderRadius: '10px', border: '1px solid #e1e5eb', marginBottom: '1.5rem' }}>
+                <input 
+                  type="text" 
+                  readOnly 
+                  value={profileUrl} 
+                  style={{ flex: 1, border: 'none', background: 'transparent', padding: '0.5rem', fontSize: '0.8rem', color: 'var(--dash-text)' }}
+                />
+                <button 
+                  onClick={handleCopy}
+                  style={{ background: profileData.themeColor, color: 'white', border: 'none', padding: '0.5rem 1rem', borderRadius: '8px', cursor: 'pointer', fontSize: '0.8rem', fontWeight: '600' }}
+                >
+                  {copied ? 'Copied!' : 'Copy'}
+                </button>
+              </div>
+              
+              <button 
+                onClick={() => setShowShareModal(false)}
+                style={{ background: 'transparent', border: 'none', color: 'var(--dash-text-muted)', cursor: 'pointer', fontSize: '0.9rem' }}
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        )}
+
       </div>
     </div>
   );
