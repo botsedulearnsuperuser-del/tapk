@@ -1,5 +1,5 @@
 import React from 'react';
-import { Mail, Search, MessageCircle, Settings, Play, CheckCircle2, ChevronDown, Facebook, Twitter, Instagram } from 'lucide-react';
+import { Play, CheckCircle2, ChevronDown } from 'lucide-react';
 import './FinancialLanding.css';
 
 interface FinancialLandingProps {

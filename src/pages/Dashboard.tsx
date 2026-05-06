@@ -1,15 +1,7 @@
 import React, { useState } from 'react';
 import {
   CheckCircle,
-  LayoutDashboard,
-  MessageSquare,
-  TrendingUp,
-  LogOut,
   ChevronDown,
-  Eye,
-  LineChart,
-  PlusCircle,
-  FolderOpen,
   QrCode,
   Share2,
   ExternalLink,
@@ -34,7 +26,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
   const [portfolioType, setPortfolioType] = useState<string | null>(null);
   const [helper, setHelper] = useState('Classic Card');
   const [feeling, setFeeling] = useState<string | null>('happy');
-  const [isDetailedView, setIsDetailedView] = useState(false);
+
 
   // Profile State
   const [profileData, setProfileData] = useState({
