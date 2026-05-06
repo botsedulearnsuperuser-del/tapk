@@ -1,0 +1,254 @@
+.agape-landing-container {
+    font-family: 'Outfit', sans-serif;
+    color: #1A1A1A;
+    background-color: #fff;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+}
+
+.agape-header {
+    background: #fff;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.02);
+}
+
+.nav-link {
+    color: #1a1a1a;
+    font-weight: 700;
+    transition: all 0.3s;
+    text-decoration: none;
+    font-size: 0.85rem;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    color: #FF8A00;
+}
+
+.hire-now-btn {
+    background-color: #FF8A00;
+    color: white;
+    border-radius: 2px;
+    font-weight: 900;
+    transition: all 0.3s;
+    border: none;
+    cursor: pointer;
+}
+
+.hire-now-btn:hover {
+    background-color: #e67a00;
+    transform: translateY(-1px);
+}
+
+/* Hero Section */
+.hero-section {
+    position: relative;
+    height: 100vh;
+    min-height: 800px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.hero-section .overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.4) 100%);
+}
+
+.hero-title {
+    font-size: clamp(3.5rem, 9vw, 6.5rem);
+    font-weight: 900;
+    color: white;
+    line-height: 0.95;
+    text-transform: uppercase;
+    letter-spacing: -3px;
+}
+
+.hero-subtitle {
+    font-size: 1.05rem;
+    color: rgba(255, 255, 255, 0.75);
+    line-height: 1.8;
+}
+
+.btn-primary {
+    background-color: #FF8A00;
+    color: white;
+    padding: 16px 48px;
+    border-radius: 2px;
+    font-weight: 900;
+    text-transform: uppercase;
+    transition: all 0.3s;
+    letter-spacing: 1px;
+    border: none;
+    font-size: 0.8rem;
+}
+
+.btn-primary:hover {
+    background-color: #e67a00;
+}
+
+.btn-outline {
+    background-color: transparent;
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    padding: 16px 48px;
+    border-radius: 2px;
+    font-weight: 900;
+    text-transform: uppercase;
+    transition: all 0.3s;
+    letter-spacing: 1px;
+    font-size: 0.8rem;
+    cursor: pointer;
+}
+
+.btn-outline:hover {
+    background-color: white;
+    color: black;
+}
+
+.btn-primary-sm {
+    background-color: #FF8A00;
+    color: white;
+    padding: 12px 28px;
+    border-radius: 4px;
+    font-weight: 700;
+    font-size: 0.8rem;
+    transition: all 0.3s;
+    text-transform: uppercase;
+    border: none;
+    cursor: pointer;
+}
+
+/* Latest Cars Slider */
+.latest-cars-section {
+    padding-top: 120px;
+    padding-bottom: 120px;
+}
+
+.btn-primary-sm:hover {
+    background-color: #e67a00;
+}
+
+.btn-primary-orange {
+    background-color: #FF8A00;
+    color: white;
+    border-radius: 2px;
+    font-weight: 900;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-primary-orange:hover {
+    background-color: #e67a00;
+    box-shadow: 0 4px 15px rgba(255, 138, 0, 0.3);
+}
+
+/* Sections */
+.section-title {
+    letter-spacing: 0.15em;
+    font-weight: 900;
+}
+
+.about-section,
+.cta-section,
+.quote-section,
+.grid-features-section {
+    padding-top: 120px;
+    padding-bottom: 120px;
+}
+
+.slider-btn {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #e5e7eb;
+    background: white;
+    color: #374151;
+    transition: all 0.3s;
+    cursor: pointer;
+}
+
+.slider-btn.active {
+    background: #FF8A00;
+    border-color: #FF8A00;
+    color: white;
+}
+
+/* Latest Cars Section */
+.car-card {
+    transition: transform 0.3s;
+    border: none;
+}
+
+.car-card:hover {
+    transform: translateY(-5px);
+}
+
+.bg-neutral-800 {
+    background-color: #333333 !important;
+}
+
+.bg-neutral-900 {
+    background-color: #1a1a1a !important;
+}
+
+/* Services Banner */
+.services-banner {
+    background-attachment: fixed;
+    height: 400px;
+    display: flex;
+    align-items: center;
+}
+
+.banner-title {
+    letter-spacing: -1px;
+    font-weight: 1000;
+}
+
+/* Utility */
+.text-orange-500 {
+    color: #FF8A00 !important;
+}
+
+.bg-orange-500 {
+    background-color: #FF8A00 !important;
+}
+
+.agape-footer {
+    border-top: 6px solid #FF8A00;
+}
+
+.agape-footer input {
+    color: black;
+    font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+
+    .about-section,
+    .cta-section,
+    .quote-section,
+    .grid-features-section,
+    .latest-cars-section {
+        padding-top: 80px;
+        padding-bottom: 80px;
+    }
+
+    .hero-section {
+        height: 80vh;
+    }
+
+    .hero-title {
+        font-size: 3rem;
+    }
+
+    .banner-title {
+        font-size: 2.5rem !important;
+    }
+}
