@@ -727,4 +727,13 @@ html, body {
   .dash-profile-back-btn {
     top: 40px !important;
   }
+
+  .dash-mvv-grid {
+    grid-template-columns: 1fr !important;
+    gap: 1rem !important;
+  }
+
+  .dash-qa-content {
+    flex-direction: column !important;
+  }
 }

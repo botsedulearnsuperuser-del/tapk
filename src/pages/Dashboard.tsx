@@ -81,6 +81,23 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const getSocialLink = (label: string, value: string) => {
+    if (!value) return '#';
+    const cleanValue = value.replace('@', '');
+    switch (label) {
+      case 'LinkedIn': return `https://linkedin.com/in/${cleanValue}`;
+      case 'Twitter / X': return `https://twitter.com/${cleanValue}`;
+      case 'Instagram': return `https://instagram.com/${cleanValue}`;
+      case 'TikTok': return `https://tiktok.com/@${cleanValue}`;
+      case 'Facebook': return `https://facebook.com/${cleanValue}`;
+      case 'YouTube': return `https://youtube.com/${cleanValue}`;
+      case 'Website': return value.startsWith('http') ? value : `https://${value}`;
+      case 'Email': return `mailto:${value}`;
+      case 'WhatsApp': return `https://wa.me/${value.replace(/\D/g, '')}`;
+      default: return '#';
+    }
+  };
+
   if (viewMode === 'profile') {
     return (
       <div className="dash-profile-preview" style={{ width: '100%', minHeight: '100vh', display: 'flex', justifyContent: 'center', background: 'var(--dash-bg)', overflowY: 'auto' }}>
@@ -174,7 +191,9 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
                       <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                         <span style={{ fontWeight: '700', color: 'var(--dash-text)', fontSize: '0.85rem' }}>{item.label}</span>
                       </div>
-                      <span style={{ color: 'var(--dash-primary)', fontSize: '0.75rem', fontWeight: '600', paddingLeft: '1rem', textAlign: 'right' }}>{item.value}</span>
+                      <a href={getSocialLink(item.label, item.value)} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--dash-primary)', fontSize: '0.75rem', fontWeight: 'bold', textDecoration: 'none', paddingLeft: '1rem', textAlign: 'right' }}>
+                        {item.label === 'Website' || item.label === 'Email' ? item.value : `@${item.value.replace('@', '')}`}
+                      </a>
                     </div>
                   ))}
                 </div>

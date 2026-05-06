@@ -463,12 +463,21 @@
   .su-container {
     flex-direction: column;
     overflow-y: auto;
+    background-color: var(--su-bg-right);
+    /* Bring back the dotted background on mobile */
+    background-image: radial-gradient(circle, rgba(8, 46, 84, 0.05) 1px, transparent 1px);
+    background-size: 24px 24px;
   }
 
   .su-left {
     max-width: 100%;
     padding: 0.25rem 0.75rem; /* Bare minimum padding */
     min-height: auto;
+  }
+
+  .su-left::before, .su-left::after {
+    height: 100% !important;
+    opacity: 0.15;
   }
 
   .su-left-content {
@@ -490,17 +499,15 @@
   }
 
   .su-title {
-    font-size: 1rem; /* Tiny title */
+    font-size: 0.9rem; /* Even smaller title to save space */
     margin-bottom: 0.1rem;
   }
 
   .su-subtitle {
-    font-size: 0.7rem; /* Tiny subtitle */
+    font-size: 1rem !important; /* Bigger text as requested */
     margin-bottom: 0.1rem;
-    display: -webkit-box;
-    -webkit-line-clamp: 1;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
+    line-height: 1.4;
+    font-weight: 600;
   }
 
   .su-logo-wrapper {
@@ -509,6 +516,7 @@
 
   .su-right {
     padding: 0.25rem 0.75rem;
+    background-color: transparent;
   }
 
   .su-form-container {
