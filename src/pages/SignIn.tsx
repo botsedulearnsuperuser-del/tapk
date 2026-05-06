@@ -45,16 +45,9 @@ const SignIn: React.FC<SignInProps> = ({ onNavigateToDashboard }) => {
             </div>
             
             <div className="su-form-group">
-              <label>Phone number <span className="required">*</span></label>
-              <div className="su-phone-input">
-                <select className="su-country-code">
-                  <option>+267</option>
-                  <option>+27</option>
-                  <option>+44</option>
-                </select>
-                <div style={{position: 'relative', flex: 1, display: 'flex', alignItems: 'center'}}>
-                    <input type="tel" className="su-phone-number" placeholder="Enter phone number" required />
-                </div>
+              <label>Password <span className="required">*</span></label>
+              <div className="su-input-wrapper">
+                <input type="password" className="su-input" placeholder="Enter your password" required />
               </div>
             </div>
             
