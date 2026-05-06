@@ -81,6 +81,145 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
     setTimeout(() => setCopied(false), 2000);
   };
 
+  if (viewMode === 'profile') {
+    return (
+      <div className="dash-profile-preview" style={{ width: '100%', minHeight: '100vh', display: 'flex', justifyContent: 'center', background: 'var(--dash-bg)', overflowY: 'auto' }}>
+        <div style={{ width: '100%', maxWidth: 'none', position: 'relative', overflow: 'hidden' }}>
+
+          {/* Hero Cover */}
+          <div className="dash-profile-hero" style={{ height: '220px', background: `linear-gradient(135deg, ${profileData.themeColor} 0%, #0c437a 100%)` }}></div>
+
+          {/* Back Button */}
+          <button 
+            className="dash-profile-back-btn"
+            onClick={() => setViewMode('prompt')}
+            style={{ position: 'absolute', top: '15px', left: '15px', background: 'rgba(255,255,255,0.2)', border: 'none', color: 'white', padding: '8px', borderRadius: '50%', cursor: 'pointer', zIndex: 10 }}
+          >
+            <ArrowLeft size={20} />
+          </button>
+
+          <div className="dash-profile-content-container" style={{ padding: '1.5rem 3rem', marginTop: '-120px', textAlign: 'center' }}>
+            <div className="dash-profile-split" style={{ display: 'flex', alignItems: 'center', gap: '3rem', textAlign: 'left' }}>
+
+              {/* Left Side: Avatar & Basic Info */}
+              <div style={{ flexShrink: 0, textAlign: 'center', paddingLeft: '3rem' }}>
+                <img
+                  src="/images/testimonial_1.png"
+                  alt="Profile"
+                  className="dash-profile-avatar"
+                  style={{ width: '140px', height: '140px', borderRadius: '50%', border: '6px solid white', boxShadow: '0 10px 25px rgba(0,0,0,0.1)', objectFit: 'cover' }}
+                />
+                <h2 style={{ marginTop: '1rem', marginBottom: '0.25rem', color: 'var(--dash-primary)', fontSize: '1.8rem', fontWeight: '800' }}>{profileData.name}</h2>
+                <p style={{ fontWeight: '700', color: 'var(--dash-accent)', marginBottom: '0.1rem' }}>{profileData.position}</p>
+                <p style={{ fontSize: '0.9rem', color: 'var(--dash-text-muted)', marginBottom: '0.5rem', fontWeight: '600' }}>{profileData.companyDetail}</p>
+                
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', alignItems: 'center' }}>
+                  <p style={{ fontSize: '0.9rem', color: 'var(--dash-text-muted)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <span className="mobile-hide-icon" style={{ display: 'flex', alignItems: 'center' }}>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 512 512" style={{ color: profileData.themeColor }}>
+                        <path fill="currentColor" d="M256 0C149.3 0 64 85.3 64 192c0 36.9 11 65.4 30.1 94.3l141.7 215c4.3 6.5 11.7 10.7 20.2 10.7s16-4.3 20.2-10.7l141.7-215C437 257.4 448 228.9 448 192C448 85.3 362.7 0 256 0m0 298.6c-58.9 0-106.7-47.8-106.7-106.8S197.1 85 256 85s106.7 47.8 106.7 106.8S314.9 298.6 256 298.6"/>
+                      </svg>
+                    </span>
+                    {profileData.location}
+                  </p>
+                  <p style={{ fontSize: '0.9rem', color: 'var(--dash-text-muted)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <span className="mobile-hide-icon" style={{ display: 'flex', alignItems: 'center' }}>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" style={{ color: profileData.themeColor }}>
+                        <g fill="currentColor"><path d="M22 12A10 10 0 0 0 12 2v2a8 8 0 0 1 7.391 4.938A8 8 0 0 1 20 12zM2 10V5a1 1 0 0 1 1-1h5a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H6a8 8 0 0 0 8 8v-2a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1h-5C7.373 22 2 16.627 2 10"/><path d="M17.543 9.704A6 6 0 0 1 18 12h-1.8A4.2 4.2 0 0 0 12 7.8V6a6 6 0 0 1 5.543 3.704"/></g>
+                      </svg>
+                    </span>
+                    {profileData.contacts}
+                  </p>
+                </div>
+
+                <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', marginTop: '1.5rem' }}>
+                  <button className="dash-btn dash-btn-primary" onClick={handleSaveContact} style={{ padding: '0.75rem 1.5rem', fontSize: '0.85rem' }}>Save Contact</button>
+                  <button className="dash-btn dash-btn-outline" onClick={() => setShowShareModal(true)} style={{ padding: '0.75rem 1.5rem', fontSize: '0.85rem' }}>
+                    <span className="mobile-hide-icon" style={{ display: 'flex', alignItems: 'center' }}><Share2 size={16} /></span> Share
+                  </button>
+                </div>
+              </div>
+
+              {/* Right Side: Bio & Social Grid */}
+              <div style={{ flex: 1, paddingTop: '2rem' }}>
+                <div className="dash-profile-summary" style={{ marginTop: '6rem', marginBottom: '1.5rem', fontSize: '1rem', lineHeight: '1.6', color: 'var(--dash-text)', background: 'var(--dash-primary-light)', padding: '1rem', borderRadius: '12px' }}>
+                  <p style={{ margin: 0 }}>{profileData.summary}</p>
+                </div>
+
+                <h3 style={{ fontSize: '1rem', textAlign: 'left', color: 'var(--dash-primary)', marginBottom: '1rem', fontWeight: '800', borderBottom: '2px solid var(--dash-primary-light)', paddingBottom: '0.25rem' }}>Professional Networks</h3>
+
+                <div className="dash-social-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.75rem' }}>
+                  {[
+                    { label: 'LinkedIn', value: profileData.linkedin },
+                    { label: 'Twitter / X', value: profileData.twitter },
+                    { label: 'Instagram', value: profileData.instagram },
+                    { label: 'Website', value: profileData.website },
+                    { label: 'Email', value: profileData.email },
+                    { label: 'Secondary Phone', value: profileData.secondaryPhone },
+                    { label: 'TikTok', value: profileData.tiktok },
+                    { label: 'Facebook', value: profileData.facebook },
+                    { label: 'WhatsApp', value: profileData.whatsapp },
+                    { label: 'YouTube', value: profileData.youtube },
+                    { label: 'Discord', value: profileData.discord }
+                  ].filter(item => item.value).map((item, idx) => (
+                    <div key={idx} style={{ 
+                      padding: '0.75rem', 
+                      background: 'var(--dash-bg)', 
+                      border: '1px solid var(--dash-border)', 
+                      borderRadius: '0', 
+                      display: 'flex', 
+                      justifyContent: 'space-between', 
+                      alignItems: 'center' 
+                    }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <span style={{ fontWeight: '700', color: 'var(--dash-text)', fontSize: '0.85rem' }}>{item.label}</span>
+                      </div>
+                      <span style={{ color: 'var(--dash-primary)', fontSize: '0.75rem', fontWeight: '600', paddingLeft: '1rem', textAlign: 'right' }}>{item.value}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          {/* Share Modal */}
+          {showShareModal && (
+            <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100 }}>
+              <div style={{ background: 'white', padding: '2rem', borderRadius: '20px', width: '90%', maxWidth: '400px', textAlign: 'center', boxShadow: '0 20px 40px rgba(0,0,0,0.2)' }}>
+                <h3 style={{ color: 'var(--dash-primary)', marginBottom: '1rem' }}>Share Profile</h3>
+                <p style={{ fontSize: '0.9rem', color: 'var(--dash-text-muted)', marginBottom: '1.5rem' }}>Copy your unique profile URL to share it with others.</p>
+                
+                <div style={{ display: 'flex', gap: '0.5rem', background: '#f8f9fa', padding: '0.5rem', borderRadius: '10px', border: '1px solid #e1e5eb', marginBottom: '1.5rem' }}>
+                  <input 
+                    type="text" 
+                    readOnly 
+                    value={profileUrl} 
+                    style={{ flex: 1, border: 'none', background: 'transparent', padding: '0.5rem', fontSize: '0.8rem', color: 'var(--dash-text)' }}
+                  />
+                  <button 
+                    onClick={handleCopy}
+                    style={{ background: profileData.themeColor, color: 'white', border: 'none', padding: '0.5rem 1rem', borderRadius: '8px', cursor: 'pointer', fontSize: '0.8rem', fontWeight: '600' }}
+                  >
+                    {copied ? 'Copied!' : 'Copy'}
+                  </button>
+                </div>
+                
+                <button 
+                  onClick={() => setShowShareModal(false)}
+                  style={{ background: 'transparent', border: 'none', color: 'var(--dash-text-muted)', cursor: 'pointer', fontSize: '0.9rem' }}
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          )}
+
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="dash-container">
       {isSidebarOpen && <div className="dash-sidebar-overlay" onClick={() => setIsSidebarOpen(false)}></div>}
@@ -545,6 +684,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
                     
                     {/* Back Button */}
                     <button 
+                      className="dash-profile-back-btn"
                       onClick={() => setViewMode('prompt')}
                       style={{ position: 'absolute', top: '15px', left: '15px', background: 'rgba(255,255,255,0.2)', border: 'none', color: 'white', padding: '8px', borderRadius: '50%', cursor: 'pointer', zIndex: 10 }}
                     >
@@ -567,15 +707,19 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
                           
                           <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', alignItems: 'center' }}>
                             <p style={{ fontSize: '0.9rem', color: 'var(--dash-text-muted)', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 512 512" style={{ color: profileData.themeColor }}>
-                                <path fill="currentColor" d="M256 0C149.3 0 64 85.3 64 192c0 36.9 11 65.4 30.1 94.3l141.7 215c4.3 6.5 11.7 10.7 20.2 10.7s16-4.3 20.2-10.7l141.7-215C437 257.4 448 228.9 448 192C448 85.3 362.7 0 256 0m0 298.6c-58.9 0-106.7-47.8-106.7-106.8S197.1 85 256 85s106.7 47.8 106.7 106.8S314.9 298.6 256 298.6"/>
-                              </svg>
+                              <span className="mobile-hide-icon" style={{ display: 'flex', alignItems: 'center' }}>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 512 512" style={{ color: profileData.themeColor }}>
+                                  <path fill="currentColor" d="M256 0C149.3 0 64 85.3 64 192c0 36.9 11 65.4 30.1 94.3l141.7 215c4.3 6.5 11.7 10.7 20.2 10.7s16-4.3 20.2-10.7l141.7-215C437 257.4 448 228.9 448 192C448 85.3 362.7 0 256 0m0 298.6c-58.9 0-106.7-47.8-106.7-106.8S197.1 85 256 85s106.7 47.8 106.7 106.8S314.9 298.6 256 298.6"/>
+                                </svg>
+                              </span>
                               {profileData.location}
                             </p>
                             <p style={{ fontSize: '0.9rem', color: 'var(--dash-text-muted)', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" style={{ color: profileData.themeColor }}>
-                                <g fill="currentColor"><path d="M22 12A10 10 0 0 0 12 2v2a8 8 0 0 1 7.391 4.938A8 8 0 0 1 20 12zM2 10V5a1 1 0 0 1 1-1h5a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H6a8 8 0 0 0 8 8v-2a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1h-5C7.373 22 2 16.627 2 10"/><path d="M17.543 9.704A6 6 0 0 1 18 12h-1.8A4.2 4.2 0 0 0 12 7.8V6a6 6 0 0 1 5.543 3.704"/></g>
-                              </svg>
+                              <span className="mobile-hide-icon" style={{ display: 'flex', alignItems: 'center' }}>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" style={{ color: profileData.themeColor }}>
+                                  <g fill="currentColor"><path d="M22 12A10 10 0 0 0 12 2v2a8 8 0 0 1 7.391 4.938A8 8 0 0 1 20 12zM2 10V5a1 1 0 0 1 1-1h5a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H6a8 8 0 0 0 8 8v-2a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1h-5C7.373 22 2 16.627 2 10"/><path d="M17.543 9.704A6 6 0 0 1 18 12h-1.8A4.2 4.2 0 0 0 12 7.8V6a6 6 0 0 1 5.543 3.704"/></g>
+                                </svg>
+                              </span>
                               {profileData.contacts}
                             </p>
                           </div>
@@ -583,7 +727,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
                           <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', marginTop: '1.5rem' }}>
                             <button className="dash-btn dash-btn-primary" onClick={handleSaveContact} style={{ padding: '0.75rem 1.5rem', fontSize: '0.85rem' }}>Save Contact</button>
                             <button className="dash-btn dash-btn-outline" onClick={() => setShowShareModal(true)} style={{ padding: '0.75rem 1.5rem', fontSize: '0.85rem' }}>
-                              <Share2 size={16} /> Share
+                              <span className="mobile-hide-icon" style={{ display: 'flex', alignItems: 'center' }}><Share2 size={16} /></span> Share
                             </button>
                           </div>
                         </div>
@@ -601,18 +745,18 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
                             gridTemplateColumns: 'repeat(3, 1fr)', 
                             gap: '0.75rem' 
                           }}>
-                              {[
-                                { label: 'LinkedIn', value: profileData.linkedin, icon: '🔗' },
-                                { label: 'Twitter / X', value: profileData.twitter, icon: '🐦' },
-                                { label: 'Instagram', value: profileData.instagram, icon: '📸' },
-                                { label: 'Website', value: profileData.website, icon: '🌐' },
-                                { label: 'Email', value: profileData.email, icon: '📧' },
-                                { label: 'Secondary Phone', value: profileData.secondaryPhone, icon: '📱' },
-                                { label: 'TikTok', value: profileData.tiktok, icon: '🎵' },
-                              { label: 'Facebook', value: profileData.facebook, icon: '👥' },
-                              { label: 'WhatsApp', value: profileData.whatsapp, icon: '💬' },
-                              { label: 'YouTube', value: profileData.youtube, icon: '📺' },
-                              { label: 'Discord', value: profileData.discord, icon: '👾' }
+                            {[
+                              { label: 'LinkedIn', value: profileData.linkedin },
+                              { label: 'Twitter / X', value: profileData.twitter },
+                              { label: 'Instagram', value: profileData.instagram },
+                              { label: 'Website', value: profileData.website },
+                              { label: 'Email', value: profileData.email },
+                              { label: 'Secondary Phone', value: profileData.secondaryPhone },
+                              { label: 'TikTok', value: profileData.tiktok },
+                              { label: 'Facebook', value: profileData.facebook },
+                              { label: 'WhatsApp', value: profileData.whatsapp },
+                              { label: 'YouTube', value: profileData.youtube },
+                              { label: 'Discord', value: profileData.discord }
                             ].filter(item => item.value).map((item, idx) => (
                               <div key={idx} style={{ 
                                 padding: '0.75rem', 
@@ -624,7 +768,6 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
                                 alignItems: 'center' 
                               }}>
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                  <span style={{ fontSize: '1rem' }}>{item.icon}</span>
                                   <span style={{ fontWeight: '700', color: 'var(--dash-text)', fontSize: '0.85rem' }}>{item.label}</span>
                                 </div>
                                 <span style={{ color: 'var(--dash-primary)', fontSize: '0.75rem', fontWeight: '600', paddingLeft: '1rem', textAlign: 'right' }}>{item.value}</span>

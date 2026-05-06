@@ -603,7 +603,23 @@ html, body {
   display: none;
 }
 
+.mobile-hide-icon {
+  display: inline-block;
+}
+
 @media (max-width: 768px) {
+  .mobile-hide-icon {
+    display: none !important;
+  }
+  
+  .dash-main {
+    overflow-y: auto !important;
+  }
+  
+  .dash-profile-preview {
+    overflow-y: visible !important;
+    height: auto !important;
+  }
   .dash-sidebar {
     position: fixed;
     top: 0;
@@ -708,11 +724,7 @@ html, body {
     align-items: flex-start !important;
   }
   
-  .dash-form-card {
-    min-height: auto !important;
-    padding: 1.5rem 0.5rem !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    margin: 0 !important;
+  .dash-profile-back-btn {
+    top: 40px !important;
   }
 }
