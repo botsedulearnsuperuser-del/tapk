@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
-  CheckCircle,
+
   ChevronDown,
-  QrCode,
   Share2,
   ExternalLink,
-  ArrowLeft
+  ArrowLeft,
+  Menu,
+  X
 } from 'lucide-react';
 import './Dashboard.css';
 
@@ -23,6 +25,8 @@ const feelingIcons = [
 const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
   const [activeNav, setActiveNav] = useState<'dashboard' | 'why'>('dashboard');
   const [viewMode, setViewMode] = useState<'prompt' | 'started' | 'completed' | 'profile'>('prompt');
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const navigate = useNavigate();
   const [portfolioType, setPortfolioType] = useState<string | null>(null);
   const [helper, setHelper] = useState('Classic Card');
   const [feeling, setFeeling] = useState<string | null>('happy');
@@ -57,12 +61,30 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
       setViewMode('completed');
     }
   };
+
+  const handleSaveContact = () => {
+    const vcard = `BEGIN:VCARD\nVERSION:3.0\nFN:${profileData.name}\nTITLE:${profileData.position}\nORG:${profileData.companyDetail}\nNOTE:${profileData.summary}\nURL:${profileData.website}\nX-SOCIALPROFILE;type=linkedin:${profileData.linkedin}\nX-SOCIALPROFILE;type=twitter:${profileData.twitter}\nX-SOCIALPROFILE;type=instagram:${profileData.instagram}\nEND:VCARD`;
+    const blob = new Blob([vcard], { type: 'text/vcard' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `${profileData.name.replace(/\s+/g, '_')}_Contact.vcf`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <div className="dash-container">
+      {isSidebarOpen && <div className="dash-sidebar-overlay" onClick={() => setIsSidebarOpen(false)}></div>}
       {/* SIDEBAR */}
-      <aside className="dash-sidebar">
-        <div className="dash-logo">
+      <aside className={`dash-sidebar ${isSidebarOpen ? 'open' : ''}`}>
+        <div className="dash-logo" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <span style={{ fontSize: '1.8rem', fontWeight: '800', color: 'var(--dash-primary)' }}>TapK</span>
+          <button className="dash-mobile-close-btn" onClick={() => setIsSidebarOpen(false)} style={{ background: 'none', border: 'none', color: 'var(--dash-primary)', cursor: 'pointer' }}>
+            <X size={24} />
+          </button>
         </div>
 
         <nav className="dash-nav">
@@ -96,6 +118,9 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
       <main className="dash-main">
         {/* HEADER */}
         <header className="dash-header">
+          <button className="dash-mobile-menu-btn" onClick={() => setIsSidebarOpen(true)}>
+            <Menu size={24} />
+          </button>
           <div className="dash-user-profile">
             <div className="dash-user-info" style={{ textAlign: 'right', display: 'flex', flexDirection: 'column', marginRight: '0.5rem' }}>
               <span className="dash-user-name">Thabo M.</span>
@@ -122,6 +147,9 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
                       <button className="dash-btn dash-btn-outline" onClick={handleSubmitLater}>
                         View Stats
                       </button>
+                      <button className="dash-btn dash-btn-outline" onClick={() => setViewMode('profile')}>
+                        View Profile
+                      </button>
                       <button className="dash-btn dash-btn-primary" onClick={handleStartNow}>
                         Update Profile
                       </button>
@@ -132,7 +160,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
 
               {viewMode === 'started' && (
                 <div className="dash-feedback-form">
-                    <div className="dash-form-card" style={{ maxWidth: '1000px' }}>
+                    <div className="dash-form-card" style={{ width: '100%', maxWidth: '1200px' }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem', borderBottom: '2px solid var(--dash-primary-light)', paddingBottom: '0.5rem' }}>
                         <h2 className="dash-form-title" style={{ margin: 0, borderBottom: 'none', paddingBottom: 0 }}>Edit Digital Profile</h2>
                         <div style={{ display: 'flex', gap: '0.75rem' }}>
@@ -412,15 +440,31 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
               {viewMode === 'completed' && (
                 <div className="dash-feedback-completed">
                   <div className="dash-completed-card">
-                    <div className="dash-completed-icon">
-                      <CheckCircle size={64} style={{ color: 'var(--dash-accent)' }} />
-                    </div>
+
                     <h2>Profile Updated Successfully!</h2>
                     <p>Your digital business card is now updated and ready to be shared.</p>
                     
-                    <div style={{ margin: '2rem 0', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem' }}>
+                    <div style={{ margin: '1.5rem 0', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem' }}>
                       <div style={{ padding: '1.5rem', background: '#f9f9fb', borderRadius: '12px', border: '2px solid var(--dash-border)' }}>
-                        <QrCode size={150} color="var(--dash-primary)" />
+                        <svg xmlns="http://www.w3.org/2000/svg" width="150" height="150" viewBox="0 0 26 26">
+                          <g fill="none">
+                            <defs>
+                              <mask id="SVGZXg9UbgH">
+                                <path fill="#fff" d="M0 0h26v26H0z"/>
+                                <g fill="#000">
+                                  <path fill-rule="evenodd" d="M9 9v2h2V9zM8 7.5a.5.5 0 0 0-.5.5v4a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5V8a.5.5 0 0 0-.5-.5zM15 9v2h2V9zm-1-1.5a.5.5 0 0 0-.5.5v4a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5V8a.5.5 0 0 0-.5-.5zM9 15v2h2v-2zm-1-1.5a.5.5 0 0 0-.5.5v4a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-4a.5.5 0 0 0-.5-.5z" clip-rule="evenodd"/>
+                                  <path d="M13.5 14a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5h-4a.5.5 0 0 1-.5-.5z"/>
+                                  <path fill-rule="evenodd" d="M5 6a1 1 0 0 1 1-1h3.5a1 1 0 0 1 0 2H6a1 1 0 0 1-1-1" clip-rule="evenodd"/>
+                                  <path fill-rule="evenodd" d="M6 5a1 1 0 0 1 1 1v3.5a1 1 0 0 1-2 0V6a1 1 0 0 1 1-1m0 16a1 1 0 0 1-1-1v-3.5a1 1 0 1 1 2 0V20a1 1 0 0 1-1 1" clip-rule="evenodd"/>
+                                  <path fill-rule="evenodd" d="M5 20a1 1 0 0 1 1-1h3.5a1 1 0 1 1 0 2H6a1 1 0 0 1-1-1m16 0a1 1 0 0 1-1 1h-3.5a1 1 0 1 1 0-2H20a1 1 0 0 1 1 1" clip-rule="evenodd"/>
+                                  <path fill-rule="evenodd" d="M20 21a1 1 0 0 1-1-1v-3.5a1 1 0 1 1 2 0V20a1 1 0 0 1-1 1m0-16a1 1 0 0 1 1 1v3.5a1 1 0 1 1-2 0V6a1 1 0 0 1 1-1" clip-rule="evenodd"/>
+                                  <path fill-rule="evenodd" d="M21 6a1 1 0 0 1-1 1h-3.5a1 1 0 1 1 0-2H20a1 1 0 0 1 1 1" clip-rule="evenodd"/>
+                                </g>
+                              </mask>
+                            </defs>
+                            <circle cx="13" cy="13" r="13" fill="var(--dash-primary)" mask="url(#SVGZXg9UbgH)"/>
+                          </g>
+                        </svg>
                       </div>
                       <span style={{ fontSize: '0.9rem', color: 'var(--dash-text-muted)', fontWeight: '600' }}>Your Unique QR Code</span>
                     </div>
@@ -428,10 +472,10 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
                     <div className="dash-prompt-actions" style={{ flexDirection: 'column', width: '100%' }}>
                       <button 
                         className="dash-btn dash-btn-primary" 
-                        style={{ width: '100%', justifyContent: 'center' }}
-                        onClick={() => setViewMode('profile')}
+                        style={{ width: '100%', justifyContent: 'center', gap: '0.75rem' }}
+                        onClick={() => navigate('/profile')}
                       >
-                        <ExternalLink size={18} />
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"><path fill="currentColor" d="M4.76 10.59a1 1 0 0 0 .26-2l-1.76-.44a1 1 0 1 0-.52 1.93l1.76.47a.8.8 0 0 0 .26.04M8.62 5a1 1 0 0 0 1 .74a.8.8 0 0 0 .26 0a1 1 0 0 0 .7-1.22l-.47-1.76a1 1 0 1 0-1.93.52Zm4.83 10A1 1 0 0 0 12 15l-3.5 3.56a2.21 2.21 0 0 1-3.06 0a2.15 2.15 0 0 1 0-3.06L9 12a1 1 0 1 0-1.41-1.41L4 14.08A4.17 4.17 0 1 0 9.92 20l3.53-3.53a1 1 0 0 0 0-1.47M5.18 6.59a1 1 0 0 0 .7.29a1 1 0 0 0 .71-.29a1 1 0 0 0 0-1.41L5.3 3.89A1 1 0 0 0 3.89 5.3Zm16.08 7.33l-1.76-.47a1 1 0 1 0-.5 1.93l1.76.47h.26a1 1 0 0 0 .26-2ZM15.38 19a1 1 0 0 0-1.23-.7a1 1 0 0 0-.7 1.22l.47 1.76a1 1 0 0 0 1 .74a1.2 1.2 0 0 0 .26 0a1 1 0 0 0 .71-1.23Zm3.44-1.57a1 1 0 0 0-1.41 1.41l1.29 1.29a1 1 0 0 0 1.41 0a1 1 0 0 0 0-1.41ZM21.2 7a4.16 4.16 0 0 0-7.12-3l-3.53 3.56A1 1 0 1 0 12 9l3.5-3.56a2.21 2.21 0 0 1 3.06 0a2.15 2.15 0 0 1 0 3.06L15 12a1 1 0 0 0 0 1.41a1 1 0 0 0 1.41 0L20 9.92A4.2 4.2 0 0 0 21.2 7"/></svg>
                         View Live Profile
                       </button>
                       <button 
@@ -447,60 +491,87 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
               )}
 
               {viewMode === 'profile' && (
-                <div className="dash-profile-preview" style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
-                  <div className="dash-form-card" style={{ maxWidth: '450px', padding: '0', overflow: 'hidden', position: 'relative' }}>
+                <div className="dash-profile-preview" style={{ width: '100%', height: 'calc(100vh - 80px)', display: 'flex', justifyContent: 'center' }}>
+                  <div className="dash-form-card" style={{ width: '100%', maxWidth: 'none', height: '100%', padding: '0', overflow: 'hidden', position: 'relative', borderRadius: '0', border: 'none' }}>
                     {/* Hero Cover */}
-                    <div style={{ height: '120px', background: 'linear-gradient(135deg, var(--dash-primary) 0%, #0c437a 100%)' }}></div>
+                    <div className="dash-profile-hero" style={{ height: '220px', background: 'linear-gradient(135deg, var(--dash-primary) 0%, #0c437a 100%)' }}></div>
                     
                     {/* Back Button */}
                     <button 
-                      onClick={() => setViewMode('completed')}
-                      style={{ position: 'absolute', top: '15px', left: '15px', background: 'rgba(255,255,255,0.2)', border: 'none', color: 'white', padding: '8px', borderRadius: '50%', cursor: 'pointer' }}
+                      onClick={() => setViewMode('prompt')}
+                      style={{ position: 'absolute', top: '15px', left: '15px', background: 'rgba(255,255,255,0.2)', border: 'none', color: 'white', padding: '8px', borderRadius: '50%', cursor: 'pointer', zIndex: 10 }}
                     >
                       <ArrowLeft size={20} />
                     </button>
 
-                    <div style={{ padding: '2rem', marginTop: '-60px', textAlign: 'center' }}>
-                      <img 
-                        src="/images/testimonial_1.png" 
-                        alt="Profile" 
-                        style={{ width: '120px', height: '120px', borderRadius: '50%', border: '5px solid white', boxShadow: '0 4px 15px rgba(0,0,0,0.1)', objectFit: 'cover' }} 
-                      />
-                      
-                      <h2 style={{ marginTop: '1rem', marginBottom: '0.25rem', color: 'var(--dash-primary)' }}>{profileData.name}</h2>
-                      <p style={{ fontWeight: '600', color: 'var(--dash-text-muted)', marginBottom: '0.5rem' }}>{profileData.position}</p>
-                      <p style={{ fontSize: '0.85rem', color: 'var(--dash-text-muted)' }}>📍 {profileData.location}</p>
-
-                      <div style={{ margin: '1.5rem 0', textAlign: 'left', fontSize: '0.9rem', lineHeight: '1.6', color: 'var(--dash-text)' }}>
-                        <p>{profileData.summary}</p>
-                      </div>
-
-                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginTop: '2rem' }}>
-                        <button className="dash-btn dash-btn-primary" style={{ fontSize: '0.85rem' }}>Save Contact</button>
-                        <button className="dash-btn dash-btn-outline" style={{ fontSize: '0.85rem' }}>
-                          <Share2 size={16} /> Share
-                        </button>
-                      </div>
-
-                      <div style={{ marginTop: '2rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                        {profileData.linkedin && (
-                          <div style={{ padding: '1rem', background: '#f9f9fb', borderRadius: '8px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <span style={{ fontWeight: '600' }}>LinkedIn</span>
-                            <span style={{ color: 'var(--dash-primary)', fontSize: '0.85rem' }}>{profileData.linkedin}</span>
+                    <div className="dash-profile-content-container" style={{ padding: '1.5rem 3rem', marginTop: '-120px', textAlign: 'center' }}>
+                      <div className="dash-profile-split" style={{ display: 'flex', alignItems: 'center', gap: '3rem', textAlign: 'left' }}>
+                        {/* Left Side: Avatar & Basic Info */}
+                        <div style={{ flexShrink: 0, textAlign: 'center', paddingLeft: '3rem' }}>
+                          <img 
+                            src="/images/testimonial_1.png" 
+                            alt="Profile" 
+                            className="dash-profile-avatar"
+                            style={{ width: '140px', height: '140px', borderRadius: '50%', border: '6px solid white', boxShadow: '0 10px 25px rgba(0,0,0,0.1)', objectFit: 'cover' }} 
+                          />
+                          <h2 style={{ marginTop: '1rem', marginBottom: '0.25rem', color: 'var(--dash-primary)', fontSize: '1.8rem', fontWeight: '800' }}>{profileData.name}</h2>
+                          <p style={{ fontWeight: '700', color: 'var(--dash-accent)', marginBottom: '0.25rem' }}>{profileData.position}</p>
+                              <p style={{ fontSize: '0.9rem', color: 'var(--dash-text-muted)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
+                              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 512 512" style={{ color: 'var(--dash-accent)' }}>
+                                <path fill="currentColor" d="M256 0C149.3 0 64 85.3 64 192c0 36.9 11 65.4 30.1 94.3l141.7 215c4.3 6.5 11.7 10.7 20.2 10.7s16-4.3 20.2-10.7l141.7-215C437 257.4 448 228.9 448 192C448 85.3 362.7 0 256 0m0 298.6c-58.9 0-106.7-47.8-106.7-106.8S197.1 85 256 85s106.7 47.8 106.7 106.8S314.9 298.6 256 298.6"/>
+                              </svg>
+                            {profileData.location}
+                          </p>
+                          
+                          <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', marginTop: '1.5rem' }}>
+                            <button className="dash-btn dash-btn-primary" onClick={handleSaveContact} style={{ padding: '0.75rem 1.5rem', fontSize: '0.85rem' }}>Save Contact</button>
+                            <button className="dash-btn dash-btn-outline" style={{ padding: '0.75rem 1.5rem', fontSize: '0.85rem' }}>
+                              <Share2 size={16} /> Share
+                            </button>
                           </div>
-                        )}
-                        {profileData.twitter && (
-                          <div style={{ padding: '1rem', background: '#f9f9fb', borderRadius: '8px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <span style={{ fontWeight: '600' }}>Twitter / X</span>
-                            <span style={{ color: 'var(--dash-primary)', fontSize: '0.85rem' }}>{profileData.twitter}</span>
+                        </div>
+
+                        {/* Right Side: Bio & Social Grid */}
+                        <div style={{ flex: 1, paddingTop: '2rem' }}>
+                          <div className="dash-profile-summary" style={{ marginTop: '6rem', marginBottom: '1.5rem', fontSize: '1rem', lineHeight: '1.6', color: 'var(--dash-text)', background: 'var(--dash-primary-light)', padding: '1rem', borderRadius: '12px' }}>
+                            <p style={{ margin: 0 }}>{profileData.summary || "Helping businesses scale through innovation..."}</p>
                           </div>
-                        )}
-                        {profileData.website && (
-                          <div style={{ padding: '1rem', background: '#f9f9fb', borderRadius: '8px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <span style={{ fontWeight: '600' }}>Website</span>
-                            <span style={{ color: 'var(--dash-primary)', fontSize: '0.85rem' }}>{profileData.website}</span>
+
+                          <h3 style={{ fontSize: '1rem', textAlign: 'left', color: 'var(--dash-primary)', marginBottom: '1rem', fontWeight: '800', borderBottom: '2px solid var(--dash-primary-light)', paddingBottom: '0.25rem' }}>Professional Networks</h3>
+                          
+                          <div className="dash-social-grid" style={{ 
+                            display: 'grid', 
+                            gridTemplateColumns: 'repeat(3, 1fr)', 
+                            gap: '0.75rem' 
+                          }}>
+                            {[
+                              { label: 'LinkedIn', value: profileData.linkedin, icon: '🔗' },
+                              { label: 'Twitter / X', value: profileData.twitter, icon: '🐦' },
+                              { label: 'Instagram', value: profileData.instagram, icon: '📸' },
+                              { label: 'Website', value: profileData.website, icon: '🌐' },
+                              { label: 'TikTok', value: profileData.tiktok, icon: '🎵' },
+                              { label: 'Facebook', value: profileData.facebook, icon: '👥' },
+                              { label: 'WhatsApp', value: profileData.whatsapp, icon: '💬' },
+                              { label: 'YouTube', value: profileData.youtube, icon: '📺' },
+                              { label: 'Discord', value: profileData.discord, icon: '👾' }
+                            ].filter(item => item.value).map((item, idx) => (
+                              <div key={idx} style={{ 
+                                padding: '0.75rem', 
+                                background: 'var(--dash-bg)', 
+                                border: '1px solid var(--dash-border)', 
+                                borderRadius: '0', 
+                                display: 'flex', 
+                                justifyContent: 'space-between', 
+                                alignItems: 'center'
+                              }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                  <span style={{ fontWeight: '700', color: 'var(--dash-text)', fontSize: '0.85rem' }}>{item.label}</span>
+                                </div>
+                                <span style={{ color: 'var(--dash-primary)', fontSize: '0.75rem', fontWeight: '600', paddingLeft: '1rem', textAlign: 'right' }}>{item.value}</span>
+                              </div>
+                            ))}
                           </div>
-                        )}
+                        </div>
                       </div>
                     </div>
                   </div>

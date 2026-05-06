@@ -1,23 +1,21 @@
-import { useState } from 'react';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 import FinancialLanding from './pages/FinancialLanding';
 import SignUp from './pages/SignUp';
 import Dashboard from './pages/Dashboard';
+import Profile from './pages/Profile';
 import './App.css';
 
 function App() {
-  const [currentPage, setCurrentPage] = useState<'landing' | 'signup' | 'dashboard'>('landing');
+  const navigate = useNavigate();
 
   return (
     <div className="app-container">
-      {currentPage === 'landing' && (
-        <FinancialLanding onNavigateToSignup={() => setCurrentPage('signup')} />
-      )}
-      {currentPage === 'signup' && (
-        <SignUp onNavigateToDashboard={() => setCurrentPage('dashboard')} />
-      )}
-      {currentPage === 'dashboard' && (
-        <Dashboard onLogout={() => setCurrentPage('landing')} />
-      )}
+      <Routes>
+        <Route path="/" element={<FinancialLanding onNavigateToSignup={() => navigate('/signup')} />} />
+        <Route path="/signup" element={<SignUp onNavigateToDashboard={() => navigate('/dashboard')} />} />
+        <Route path="/dashboard" element={<Dashboard onLogout={() => navigate('/')} />} />
+        <Route path="/profile" element={<Profile />} />
+      </Routes>
     </div>
   );
 }

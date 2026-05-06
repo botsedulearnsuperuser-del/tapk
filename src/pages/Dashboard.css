@@ -2,7 +2,6 @@ html, body {
   margin: 0;
   padding: 0;
   height: 100%;
-  overflow: hidden;
 }
 
 :root {
@@ -591,4 +590,129 @@ html, body {
   color: var(--dash-text-muted);
   font-size: 0.95rem;
   line-height: 1.5;
+}
+
+/* Mobile Responsive Profile Layout */
+.dash-sidebar-overlay {
+  display: none;
+}
+.dash-mobile-menu-btn {
+  display: none;
+}
+.dash-mobile-close-btn {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .dash-sidebar {
+    position: fixed;
+    top: 0;
+    left: -260px;
+    height: 100vh;
+    z-index: 1000;
+    transition: left 0.3s ease;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+  }
+  
+  .dash-sidebar.open {
+    left: 0;
+  }
+  
+  .dash-sidebar-overlay {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(8, 46, 84, 0.4);
+    z-index: 999;
+    backdrop-filter: blur(2px);
+  }
+  
+  .dash-header {
+    justify-content: space-between;
+    padding: 0 1.5rem;
+  }
+  
+  .dash-mobile-menu-btn {
+    display: flex;
+    align-items: center;
+    background: none;
+    border: none;
+    color: var(--dash-primary);
+    cursor: pointer;
+    padding: 0;
+  }
+
+  .dash-mobile-close-btn {
+    display: flex !important;
+  }
+
+  .dash-profile-split {
+    flex-direction: column !important;
+    gap: 1rem !important;
+    text-align: center !important;
+  }
+  
+  .dash-profile-split > div {
+    padding-left: 0 !important;
+    width: 100% !important;
+  }
+
+  .dash-social-grid {
+    grid-template-columns: 1fr !important;
+    gap: 0.5rem !important;
+  }
+  
+  .dash-social-grid > div {
+    padding: 0.5rem !important;
+  }
+
+  .dash-profile-hero {
+    height: 120px !important;
+  }
+
+  .dash-profile-content-container {
+    padding: 1rem !important;
+    margin-top: -60px !important;
+  }
+
+  .dash-profile-avatar {
+    width: 90px !important;
+    height: 90px !important;
+    border-width: 4px !important;
+  }
+
+  .dash-profile-summary {
+    margin-top: 1rem !important;
+    margin-bottom: 1rem !important;
+    font-size: 0.85rem !important;
+    padding: 0.75rem !important;
+  }
+
+  .dash-profile-preview {
+    height: auto !important;
+    min-height: calc(100vh - 80px);
+    overflow-y: auto;
+  }
+  
+  .dash-content {
+    padding: 0.25rem !important;
+  }
+
+  .dash-feedback-form {
+    padding: 0 !important;
+    height: calc(100vh - 80px) !important;
+    overflow-y: auto !important;
+    align-items: flex-start !important;
+  }
+  
+  .dash-form-card {
+    min-height: auto !important;
+    padding: 1.5rem 0.5rem !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+  }
 }

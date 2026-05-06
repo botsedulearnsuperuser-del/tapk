@@ -782,13 +782,28 @@ a {
 
 /* RESPONSIVE */
 @media (max-width: 991px) {
+  .hero-section {
+    height: auto;
+    min-height: 100vh;
+    padding-bottom: 40px;
+  }
   .hero-container {
     flex-direction: column;
     text-align: center;
+    padding-top: 120px;
   }
   .hero-content {
-    margin-bottom: 50px;
+    margin-bottom: 40px;
     max-width: 100%;
+  }
+  .hero-image-wrapper {
+    max-height: 400px;
+    justify-content: center;
+    overflow: visible;
+  }
+  .hero-image {
+    max-height: 400px;
+    object-position: center top;
   }
   .stats-container {
     grid-template-columns: repeat(2, 1fr);
